@@ -7,24 +7,6 @@
 //
 
 import Foundation
-enum Either<A, B> {
-    case right(A)
-    case left(B)
-}
-extension Either where A == (Data, URLResponse), B == (Error, URLResponse?) {
-    /// convert (Data?, URLResponse?, Error?) into
-    /// Either<(Data, URLResponse), (Error, URLResponse?)>
-    init(data: Data?, response: URLResponse?, error: Error?) {
-        switch (data, response, error) {
-        case let (data?, response?, _):
-            self = .right((data, response))
-        case let (_, response, error?):
-            self = .left((error, response))
-        default:
-            fatalError("Unimplemented")
-        }
-    }
-}
 
 struct PiouPiouWebService {
     var fetchPiouPiou = fetchPiouPiou(onComplete:)
@@ -46,6 +28,12 @@ struct AEMETWebService {
     var fetchAemet = fetchAemet(onComplete:)
     var fetchAemetDatos = fetchAemetDatos(url:onComplete:)
 }
+private func fetchAemet(onComplete completionHandler: (@escaping (ResponseSuccess?) -> Void)) {
+    Webservice.load(AEMETEndPoints.observacionConvencionalTodas(), completion: completionHandler)
+}
+private func fetchAemetDatos(url:URL, onComplete completionHandler: (@escaping ([AemetDatos]?) -> Void)) {
+    Webservice.load(Resource(url: url, [AemetDatos].self, dateFormatter:AEMETEndPoints.dateFormatter), completion: completionHandler)
+}
 
 extension AEMETWebService {
     static let mock = AEMETWebService(fetchAemet: { callback in
@@ -58,11 +46,23 @@ extension AEMETWebService {
     })
 }
 
-private func fetchAemet(onComplete completionHandler: (@escaping (ResponseSuccess?) -> Void)) {
-    Webservice.load(AEMETEndPoints.observacionConvencionalTodas(), completion: completionHandler)
+private enum Either<A, B> {
+    case right(A)
+    case left(B)
 }
-private func fetchAemetDatos(url:URL, onComplete completionHandler: (@escaping ([AemetDatos]?) -> Void)) {
-    Webservice.load(Resource(url: url, [AemetDatos].self, dateFormatter:AEMETEndPoints.dateFormatter), completion: completionHandler)
+extension Either where A == (Data, URLResponse), B == (Error, URLResponse?) {
+    /// convert (Data?, URLResponse?, Error?) into
+    /// Either<(Data, URLResponse), (Error, URLResponse?)>
+    init(data: Data?, response: URLResponse?, error: Error?) {
+        switch (data, response, error) {
+        case let (data?, response?, _):
+            self = .right((data, response))
+        case let (_, response, error?):
+            self = .left((error, response))
+        default:
+            fatalError("Unimplemented")
+        }
+    }
 }
 
 final class Webservice {
@@ -75,39 +75,17 @@ final class Webservice {
                     completion(resource.parse(data))
                 } else {
                     // erreur de requete
+                    completion(nil)
                     print("statusCode: ", resp.statusCode)
                     print(String(data: data, encoding:.utf8)!)
                 }
                 
             // erreur de connection
             case let .left(error, _):
+                completion(nil)
                 print("error:", error)
             }
             }.resume()
     }
 }
 
-public struct Resource<A:Decodable> {
-    let url: URL
-    let parse: (Data) -> A?
-}
-
-extension Resource {
-    public init(url: URL, _ type: A.Type, dateFormatter: DateFormatter) {
-        var response: A?
-        self.url = url
-        self.parse = { data in
-            do {
-                let decoder = JSONDecoder()
-                decoder.dateDecodingStrategy = .formatted(dateFormatter)
-                decoder.keyDecodingStrategy = .convertFromSnakeCase
-                response = try decoder.decode(type, from: data)
-            }
-            catch {
-                // erreur de decodage du json
-                print(error)
-            }
-            return response
-        }
-    }
-}

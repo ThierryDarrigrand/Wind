@@ -10,6 +10,13 @@ import UIKit
 
 //var Current = Environment.mock
 var Current = Environment()
+// TODO: tester erreurs
+/*
+ Current.gitHub.fetchRepos = { callback in
+ callback(.failure(NSError.init(domain: "co.pointfree", code: 1, userInfo: [NSLocalizedDescriptionKey: "Ooops!"])))
+ }
+
+ */
 
 class StationsListViewController: UITableViewController {
     var stations: [Station] = [] {

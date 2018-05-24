@@ -8,28 +8,28 @@
 
 import Foundation
 
-struct PiouPiouData:Decodable {
+struct PiouPiouData:Decodable, Equatable {
     let id: Int
-    struct Meta: Decodable {
+    struct Meta: Decodable, Equatable {
         let name: String
         let description: String?
         let picture: String?
         let date: Date?
-        struct Rating: Decodable {
+        struct Rating: Decodable, Equatable {
             let upvotes: Int
             let downvotes: Int
         }
         let rating: Rating? 
     }
     let meta: Meta
-    struct Location:Decodable {
+    struct Location:Decodable, Equatable {
         let latitude: Double?
         let longitude: Double?
         let date: Date?
         let success: Bool
     }
     let location: Location
-    struct Measurements:Decodable {
+    struct Measurements:Decodable, Equatable {
         let date: Date?
         let pressure: String? //nil
         /// degrees
@@ -42,7 +42,7 @@ struct PiouPiouData:Decodable {
         let windSpeedMin: Double?
     }
     let measurements: Measurements
-    struct Status:Decodable {
+    struct Status:Decodable, Equatable {
         let date: Date?
         /// dB
         let snr: Double?
@@ -59,7 +59,7 @@ struct PiouPiouStations:Decodable {
     let data: [PiouPiouData]
 }
 
-struct PiouPiouSingleStation:Decodable {
+struct PiouPiouSingleStation:Decodable, Equatable {
     let doc: String
     let license: String
     let attribution: String

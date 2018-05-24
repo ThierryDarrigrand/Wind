@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B71217C820A89D1A0071C506 /* json.txt in Resources */ = {isa = PBXBuildFile; fileRef = B71217C720A89D1A0071C506 /* json.txt */; };
+		B71217C820A89D1A0071C506 /* Aemet.txt in Resources */ = {isa = PBXBuildFile; fileRef = B71217C720A89D1A0071C506 /* Aemet.txt */; };
+		B73002BB20B719BF0089EFEB /* PiouPiouMeta.txt in Resources */ = {isa = PBXBuildFile; fileRef = B73002B920B719BF0089EFEB /* PiouPiouMeta.txt */; };
 		B780E85E20A71D8E0012C42F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B780E85D20A71D8E0012C42F /* AppDelegate.swift */; };
 		B780E86020A71D8E0012C42F /* StationsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B780E85F20A71D8E0012C42F /* StationsListViewController.swift */; };
 		B780E86320A71D8E0012C42F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B780E86120A71D8E0012C42F /* Main.storyboard */; };
@@ -32,7 +33,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		B71217C720A89D1A0071C506 /* json.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = json.txt; sourceTree = "<group>"; };
+		B71217C720A89D1A0071C506 /* Aemet.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Aemet.txt; sourceTree = "<group>"; };
+		B73002B920B719BF0089EFEB /* PiouPiouMeta.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PiouPiouMeta.txt; sourceTree = "<group>"; };
 		B780E85A20A71D8E0012C42F /* Wind.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wind.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B780E85D20A71D8E0012C42F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B780E85F20A71D8E0012C42F /* StationsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationsListViewController.swift; sourceTree = "<group>"; };
@@ -68,6 +70,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B73002BD20B719D20089EFEB /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				B71217C720A89D1A0071C506 /* Aemet.txt */,
+				B73002B920B719BF0089EFEB /* PiouPiouMeta.txt */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		B780E85120A71D8D0012C42F = {
 			isa = PBXGroup;
 			children = (
@@ -100,7 +111,7 @@
 				B780E87F20A71FB30012C42F /* PiouPiou.swift */,
 				B780E88320A7201E0012C42F /* WebService.swift */,
 				B780E88120A71FE00012C42F /* Aemet.swift */,
-				B71217C720A89D1A0071C506 /* json.txt */,
+				B73002BD20B719D20089EFEB /* Resources */,
 			);
 			path = Wind;
 			sourceTree = "<group>";
@@ -195,10 +206,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B71217C820A89D1A0071C506 /* json.txt in Resources */,
+				B71217C820A89D1A0071C506 /* Aemet.txt in Resources */,
 				B780E86820A71D8F0012C42F /* LaunchScreen.storyboard in Resources */,
 				B780E86520A71D8F0012C42F /* Assets.xcassets in Resources */,
 				B780E86320A71D8E0012C42F /* Main.storyboard in Resources */,
+				B73002BB20B719BF0089EFEB /* PiouPiouMeta.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

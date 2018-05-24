@@ -7,7 +7,7 @@
 //
 
 import Foundation
-struct AEMEDatos: Codable {
+struct AemetDatos: Codable {
     /// Indicativo climatógico de la estación meteorológia automática
     let idema: String //"0002I",
     /// Longitud de la estación meteorológica (grados)
@@ -19,7 +19,7 @@ struct AEMEDatos: Codable {
     /// Ubicación de la estación. Nombre de la estación
     let ubi: String //"VANDELLÓS",
     /// Fecha hora final del período de observación, se trata de datos del periodo de la hora anterior a la indicada por este campo (hora UTC)
-    let fint: String? // Date "2018-05-09T10:00:00",
+    let fint: Date? // Date "2018-05-09T10:00:00",
     /// Precipitación acumulada, medida por el pluviómetro, durante los 60 minutos anteriores a la hora indicada por el período de observación 'fint' (mm, equivalente a l/m2)
     let prec: Double? //0.0,
     /// Precipitación acumulada, medida por el disdrómetro, durante los 60 minutos anteriores a la hora indicada por el período de observación 'fint' (mm, equivalente a l/m2)

@@ -14,7 +14,7 @@ struct PiouPiouData:Decodable {
         let name: String
         let description: String?
         let picture: String?
-        let date: String?
+        let date: Date?
         struct Rating: Decodable {
             let upvotes: Int
             let downvotes: Int
@@ -25,12 +25,12 @@ struct PiouPiouData:Decodable {
     struct Location:Decodable {
         let latitude: Double?
         let longitude: Double?
-        let date: String?
+        let date: Date?
         let success: Bool
     }
     let location: Location
     struct Measurements:Decodable {
-        let date: String?
+        let date: Date?
         let pressure: String? //nil
         /// degrees
         let windHeading: Double?
@@ -43,7 +43,7 @@ struct PiouPiouData:Decodable {
     }
     let measurements: Measurements
     struct Status:Decodable {
-        let date: String?
+        let date: Date?
         /// dB
         let snr: Double?
         let state: String?

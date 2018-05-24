@@ -59,22 +59,11 @@ extension Resource {
         self.url = url
         self.parse = { data in
             let decoder = JSONDecoder()
-            // TODO: Date
-            //            let RFC3339DateFormatter = DateFormatter()
-            //            //RFC3339DateFormatter.locale = Locale(identifier: "en_US_POSIX")
-            //            RFC3339DateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-            //            RFC3339DateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-            //
-            //            /* 39 minutes and 57 seconds after the 16th hour of December 19th, 1996 with an offset of -08:00 from UTC (Pacific Standard Time) */
-            //            //let string = "1996-12-19T16:39:57-08:00"
-            //            let string = "2015-08-18T08:19:46"
-            //
-            //            let date = RFC3339DateFormatter.date(from: string)
-            
-            //             let formatter = ISO8601DateFormatter()
-            //             formatter.formatOptions = [.withYear, .withMonth, .withDay, .withTime, .withDashSeparatorInDate, .withColonSeparatorInTime]
-            //            decoder.dateDecodingStrategy = .formatted(formatter)
-            
+
+            let piouPiouDateFormatter = DateFormatter()
+            piouPiouDateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.zzzZ" // 2018-05-24T09:23:32.000Z
+            decoder.dateDecodingStrategy = .formatted(piouPiouDateFormatter)
+
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             do {
                 response = try decoder.decode(type, from: data)

@@ -9,7 +9,7 @@
 import UIKit
 
 class StationDetailViewController: UITableViewController {
-    var measurements: Station.Measurements?
+    var measurements: Station.Measurement?
     
     @IBOutlet weak var measurementDateLabel: UILabel!
     @IBOutlet weak var measurementWindHeadingLabel: UILabel!
@@ -21,11 +21,13 @@ class StationDetailViewController: UITableViewController {
         super.viewDidLoad()
         
         if let measurements = measurements {
-            measurementDateLabel.text = measurements.formattedDate
-            measurementWindHeadingLabel.text = Station.Measurements.formattedAngle(measurements.windHeading)
-            measurementWindAverageSpeedLabel.text =
-            Station.Measurements.formattedSpeed(measurements.windSpeedAvg)
-            measurementsWindMaxSpeedLabel.text = Station.Measurements.formattedSpeed(measurements.windSpeedMax)
+            measurementDateLabel.text =
+                measurements.formattedDate
+            measurementWindHeadingLabel.text =
+                measurements.windHeading.map{Station.Measurement.formattedAngle($0)} ?? ""
+            measurementWindAverageSpeedLabel.text = measurements.windSpeedAvg.map{Station.Measurement.formattedSpeed($0)} ?? ""
+            measurementsWindMaxSpeedLabel.text =
+                measurements.windSpeedMax.map{Station.Measurement.formattedSpeed($0)} ?? ""
         }
         
     }

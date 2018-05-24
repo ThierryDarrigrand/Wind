@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		B71217C820A89D1A0071C506 /* Aemet.txt in Resources */ = {isa = PBXBuildFile; fileRef = B71217C720A89D1A0071C506 /* Aemet.txt */; };
 		B73002BB20B719BF0089EFEB /* PiouPiouMeta.txt in Resources */ = {isa = PBXBuildFile; fileRef = B73002B920B719BF0089EFEB /* PiouPiouMeta.txt */; };
+		B73002BF20B72C010089EFEB /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = B73002BE20B72C010089EFEB /* Environment.swift */; };
 		B780E85E20A71D8E0012C42F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B780E85D20A71D8E0012C42F /* AppDelegate.swift */; };
 		B780E86020A71D8E0012C42F /* StationsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B780E85F20A71D8E0012C42F /* StationsListViewController.swift */; };
 		B780E86320A71D8E0012C42F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B780E86120A71D8E0012C42F /* Main.storyboard */; };
@@ -35,6 +36,7 @@
 /* Begin PBXFileReference section */
 		B71217C720A89D1A0071C506 /* Aemet.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Aemet.txt; sourceTree = "<group>"; };
 		B73002B920B719BF0089EFEB /* PiouPiouMeta.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PiouPiouMeta.txt; sourceTree = "<group>"; };
+		B73002BE20B72C010089EFEB /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		B780E85A20A71D8E0012C42F /* Wind.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wind.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B780E85D20A71D8E0012C42F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B780E85F20A71D8E0012C42F /* StationsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationsListViewController.swift; sourceTree = "<group>"; };
@@ -110,6 +112,7 @@
 				B780E87D20A71F630012C42F /* Station.swift */,
 				B780E87F20A71FB30012C42F /* PiouPiou.swift */,
 				B780E88320A7201E0012C42F /* WebService.swift */,
+				B73002BE20B72C010089EFEB /* Environment.swift */,
 				B780E88120A71FE00012C42F /* Aemet.swift */,
 				B73002BD20B719D20089EFEB /* Resources */,
 			);
@@ -229,6 +232,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B780E88420A7201E0012C42F /* WebService.swift in Sources */,
+				B73002BF20B72C010089EFEB /* Environment.swift in Sources */,
 				B780E86020A71D8E0012C42F /* StationsListViewController.swift in Sources */,
 				B780E87E20A71F630012C42F /* Station.swift in Sources */,
 				B780E85E20A71D8E0012C42F /* AppDelegate.swift in Sources */,

@@ -67,17 +67,22 @@ struct PiouPiouSingleStation:Decodable {
 }
 
 struct PiouPiouEndPoints {
+    static var dateFormatter:DateFormatter {
+        let piouPiouDateFormatter = DateFormatter()
+        piouPiouDateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.zzzZ" // 2018-05-24T09:23:32.000Z
+        return piouPiouDateFormatter
+    }
     static func singleStation(stationID: Int)-> Resource<PiouPiouSingleStation>{
-        return Resource(url: URL(string:"http://api.pioupiou.fr/v1/live/\(stationID)")!, PiouPiouSingleStation.self)
+        return Resource(url: URL(string:"http://api.pioupiou.fr/v1/live/\(stationID)")!, PiouPiouSingleStation.self, dateFormatter:dateFormatter)
     }
     static func allStations()-> Resource<PiouPiouStations>{
-        return Resource(url: URL(string:"http://api.pioupiou.fr/v1/live/all")!, PiouPiouStations.self)
+        return Resource(url: URL(string:"http://api.pioupiou.fr/v1/live/all")!, PiouPiouStations.self, dateFormatter:dateFormatter)
     }
     static func singleStationWithMeta(stationID: Int)-> Resource<PiouPiouSingleStation>{
-        return Resource(url: URL(string:"http://api.pioupiou.fr/v1/live-with-meta/\(stationID)")!, PiouPiouSingleStation.self)
+        return Resource(url: URL(string:"http://api.pioupiou.fr/v1/live-with-meta/\(stationID)")!, PiouPiouSingleStation.self, dateFormatter:dateFormatter)
     }
     static func allStationsWithMeta()-> Resource<PiouPiouStations>{
-        return Resource(url: URL(string:"http://api.pioupiou.fr/v1/live-with-meta/all")!, PiouPiouStations.self)
+        return Resource(url: URL(string:"http://api.pioupiou.fr/v1/live-with-meta/all")!, PiouPiouStations.self, dateFormatter:dateFormatter)
     }
     //    "http://api.pioupiou.fr/v1/archive/\(stationID)?start=\(start)&stop=\(stop)&format=\(format)",
     //    "http://api.pioupiou.fr/v1/archive/\(stationID)?start=\(start)&stop=\(stop)",

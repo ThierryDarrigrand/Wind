@@ -133,20 +133,27 @@ struct AEMETEndPoints {
         let api_key = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2aW5jZW50LmRhcnJpZ3JhbmRAZ21haWwuY29tIiwianRpIjoiY2UwYzk3ZjEtNGY4My00MTgwLTg0YjYtYjhmZTJjNzA3YzFkIiwiaXNzIjoiQUVNRVQiLCJpYXQiOjE1MjU4MTMyNTcsInVzZXJJZCI6ImNlMGM5N2YxLTRmODMtNDE4MC04NGI2LWI4ZmUyYzcwN2MxZCIsInJvbGUiOiIifQ.OwU32gwyQgddBVeREZ4InlPqiKIr9392asnhKw6ZSvo"
         return URL(string: "/opendata" + api + "/?api_key=" + api_key, relativeTo: baseURL)!
     }
+    
+    static var dateFormatter: DateFormatter {
+        let aemetDateFormatter = DateFormatter()
+        aemetDateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        aemetDateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+        return aemetDateFormatter
+    }
     static func observacionConvencionalTodas()-> Resource<ResponseSuccess>{
         let url = urlApi("/api/observacion/convencional/todas")
         print(url.absoluteString)
-        return Resource(url: url, ResponseSuccess.self)
+        return Resource(url: url, ResponseSuccess.self, dateFormatter: dateFormatter)
     }
     static func observacionConvencionalDatosEstacion(idema: String)-> Resource<ResponseSuccess> {
         let url = urlApi("/api/observacion/convencional/datos/estacion/\(idema)")
         print(url.absoluteString)
-        return Resource(url: url, ResponseSuccess.self)
+        return Resource(url: url, ResponseSuccess.self, dateFormatter: dateFormatter)
     }
     static func valoresClimatologicosInventarioEstacionesTodasEstaciones()-> Resource<ResponseSuccess>{
         let url = urlApi("/api/valores/climatologicos/inventarioestaciones/todasestaciones")
         print(url.absoluteString)
-        return Resource(url: url, ResponseSuccess.self)
+        return Resource(url: url, ResponseSuccess.self, dateFormatter: dateFormatter)
     }
 }
 

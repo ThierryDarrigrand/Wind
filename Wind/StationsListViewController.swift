@@ -8,6 +8,9 @@
 
 import UIKit
 
+//var Current = Environment.mock
+var Current = Environment()
+
 class StationsListViewController: UITableViewController {
     var stations: [Station] = [] {
         didSet {
@@ -23,50 +26,22 @@ class StationsListViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        Webservice.load(PiouPiouEndPoints.allStationsWithMeta()) { [weak self] result in
+        Current.piouPiouWebService.fetchPiouPiou{ [weak self] result in
             DispatchQueue.main.async {
                 self?.stations += [Station](piouPiouDatas: result!.data)
             }
         }
  
-        /*
-        Webservice.load(AEMETEndPoints.observacionConvencionalTodas()) {  [weak self] result in
+        Current.aemetWebService.fetchAemet{ [weak self] result in
             if let result = result {
                 let url = URL(string:result.datos)!
-                Webservice.load(Resource(url: url, [AEMEDatos].self)) { aemeDatas in
-                    let stations = aemeDatas!.map(Station.init)
+                Current.aemetWebService.fetchAemetDatos(url) { aemetDatas in
                     DispatchQueue.main.async {
-                        self.stations += stations
+                        self?.stations += [Station](aemetDatas: aemetDatas!)
                     }
                 }
             }
         }
- */
-
-        // tant que le certificat de Aeme n'est pas accessible:
-        let fileURL = Bundle.main.url(forResource: "Aemet", withExtension: "txt")
-        let data = try! Data(contentsOf: fileURL!)
-        
-        var aemetDatas:[AemetDatos] = []
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
-        
-        let aemetDateFormatter = DateFormatter()
-        aemetDateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-        aemetDateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-        decoder.dateDecodingStrategy = .formatted(aemetDateFormatter)
-
-        do {
-            aemetDatas = try decoder.decode([AemetDatos].self, from: data)
-        }
-        catch {
-            // erreur de decodage du json
-            print(error)
-        }
-        DispatchQueue.main.async {
-            self.stations += [Station](aemetDatas: aemetDatas)
-        }
-
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

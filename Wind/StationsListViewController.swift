@@ -8,8 +8,8 @@
 
 import UIKit
 
-//var Current = Environment.mock
-var Current = Environment()
+var Current = Environment.mock
+//var Current = Environment()
 // TODO: tester erreurs
 /*
  Current.gitHub.fetchRepos = { callback in
@@ -35,17 +35,32 @@ class StationsListViewController: UITableViewController {
         super.viewDidLoad()
         Current.piouPiouWebService.fetchPiouPiou{ [weak self] result in
             DispatchQueue.main.async {
-                self?.stations += [Station](piouPiouDatas: result!.data)
+                switch result {
+                case .success(let piouPiouStations):
+                    self?.stations += [Station](piouPiouDatas: piouPiouStations.data)
+                case .failure(let error):
+                    print("\(error)")
+                }
             }
         }
  
         Current.aemetWebService.fetchAemet{ [weak self] result in
-            if let result = result {
-                let url = URL(string:result.datos)!
-                Current.aemetWebService.fetchAemetDatos(url) { aemetDatas in
-                    DispatchQueue.main.async {
-                        self?.stations += [Station](aemetDatas: aemetDatas!)
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let responseSuccess):
+                    let url = URL(string:responseSuccess.datos)!
+                    Current.aemetWebService.fetchAemetDatos(url) { [weak self] result in
+                        DispatchQueue.main.async {
+                            switch result {
+                            case .success(let aemetDatas):
+                                self?.stations += [Station](aemetDatas: aemetDatas)
+                            case .failure(let error):
+                                print("\(error)")
+                            }
+                        }
                     }
+                case .failure(let error):
+                    print("\(error)")
                 }
             }
         }

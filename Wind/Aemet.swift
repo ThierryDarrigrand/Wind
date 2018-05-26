@@ -150,10 +150,15 @@ struct AEMETEndPoints {
         print(url.absoluteString)
         return Resource(url: url, ResponseSuccess.self, dateFormatter: dateFormatter)
     }
+    
     static func valoresClimatologicosInventarioEstacionesTodasEstaciones()-> Resource<ResponseSuccess>{
         let url = urlApi("/api/valores/climatologicos/inventarioestaciones/todasestaciones")
         print(url.absoluteString)
         return Resource(url: url, ResponseSuccess.self, dateFormatter: dateFormatter)
+    }
+    
+    static func datos(url:URL)->Resource<[AemetDatos]> {
+        return Resource(url: url, [AemetDatos].self, dateFormatter:dateFormatter)
     }
 }
 

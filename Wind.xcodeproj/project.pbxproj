@@ -117,10 +117,10 @@
 				B780E86920A71D8F0012C42F /* Info.plist */,
 				B780E87D20A71F630012C42F /* Station.swift */,
 				B780E87F20A71FB30012C42F /* PiouPiou.swift */,
+				B780E88120A71FE00012C42F /* Aemet.swift */,
 				B780E88320A7201E0012C42F /* WebService.swift */,
 				B73002C420B774B30089EFEB /* Resource.swift */,
 				B73002BE20B72C010089EFEB /* Environment.swift */,
-				B780E88120A71FE00012C42F /* Aemet.swift */,
 				B73002BD20B719D20089EFEB /* Resources */,
 			);
 			path = Wind;

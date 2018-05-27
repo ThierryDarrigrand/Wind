@@ -13,43 +13,45 @@ enum Result<Value, Error> {
     case failure(Error)
 }
 
-struct PiouPiouWebService {
-    var fetchPiouPiou = fetchPiouPiou(onComplete:)
+struct PiouPiou {
+    var fetchStations = fetchStations(resource:onComplete:)
 }
 
-private func fetchPiouPiou(onComplete completionHandler:(@escaping (Result<PiouPiouStations, Error>) -> Void)) {
-    load(PiouPiouEndPoints.allStationsWithMeta(), completion: completionHandler)
+private func fetchStations(resource: Resource<PiouPiouStations>, onComplete completionHandler:(@escaping (Result<PiouPiouStations, Error>) -> Void)) {
+    load(resource, completion: completionHandler)
 }
 
-extension PiouPiouWebService {
-    static let mock = PiouPiouWebService(fetchPiouPiou: {callback in
+extension PiouPiou {
+    static let mock = PiouPiou(fetchStations:{_, callback in
         let fileURL = Bundle.main.url(forResource: "PiouPiouMeta", withExtension: "txt")
         let data = try! Data(contentsOf: fileURL!)
-        let result = PiouPiouEndPoints.allStationsWithMeta().parse(data)
-        callback(.success(result!))
+        let resource = PiouPiouEndPoints.allStationsWithMeta()
+        let result = resource.parse(data)!
+        callback(.success(result))
     })
 }
 
-struct AEMETWebService {
-    var fetchAemet = fetchAemet(onComplete:)
-    var fetchAemetDatos = fetchAemetDatos(url:onComplete:)
+struct AeMet {
+    var fetch = fetch(resource:onComplete:)
+    var fetchDatas = fetchDatas(resource:onComplete:)
 }
-private func fetchAemet(onComplete completionHandler: (@escaping (Result<ResponseSuccess, Error>) -> Void)) {
-    load(AEMETEndPoints.observacionConvencionalTodas(), completion: completionHandler)
+private func fetch(resource:Resource<ResponseSuccess>, onComplete completionHandler: (@escaping (Result<ResponseSuccess, Error>) -> Void)) {
+    load(resource, completion: completionHandler)
 }
-private func fetchAemetDatos(url:URL, onComplete completionHandler: (@escaping (Result<[AemetDatos], Error>) -> Void)) {
-    load(AEMETEndPoints.datos(url: url), completion: completionHandler)
+private func fetchDatas(resource:Resource<[AemetDatos]>, onComplete completionHandler: (@escaping (Result<[AemetDatos], Error>) -> Void)) {
+    load(resource, completion: completionHandler)
 }
 
-extension AEMETWebService {
-    static let mock = AEMETWebService(fetchAemet: { callback in
-        let response = ResponseSuccess(descripcion:"Éxito", estado:200, datos: "https://www.apple.com", metadatos:"")
+extension AeMet {
+    static let mockURL = URL(string: "https://www.apple.com")!
+    static let mock = AeMet(fetch: {_, callback in
+        let response = ResponseSuccess(descripcion:"Éxito", estado:200, datos: mockURL.absoluteString, metadatos:"")
         callback(.success(response))
-    }, fetchAemetDatos: { url, callback in
+    }, fetchDatas: { _ , callback in
         let fileURL = Bundle.main.url(forResource: "Aemet", withExtension: "txt")
         let data = try! Data(contentsOf: fileURL!)
-        let result = AEMETEndPoints.datos(url: url).parse(data)
-        callback(.success(result!))
+        let result = AEMETEndPoints.datos(url: mockURL).parse(data)!
+        callback(.success(result))
     })
 }
 

@@ -6,19 +6,24 @@
 //  Copyright © 2018 Thierry Darrigrand. All rights reserved.
 //
 
+import Foundation
 
- struct Station {
-    let id: String
-    let name: String
-    let latitude: Double
-    let longitude: Double
-    struct Measurement:Decodable {
-        let date: Date
-        let windHeading: Double?
-        let windSpeedAvg: Double?
-        let windSpeedMax: Double?
+struct Station:Equatable, Comparable {
+    static func < (lhs: Station, rhs: Station) -> Bool {
+        return lhs.id < rhs.id
     }
-    var measurements: [Measurement]
+    
+    var id: String
+    var name: String
+    var latitude: Double
+    var longitude: Double
+    struct Measurement:Equatable {
+        var date: Date
+        var windHeading: Double?
+        var windSpeedAvg: Double?
+        var windSpeedMax: Double?
+    }
+    var measurements: [Measurement] = []
 }
 extension Station {
     init(piouPiouData: PiouPiouData) {
@@ -28,8 +33,6 @@ extension Station {
         self.longitude = piouPiouData.location.longitude ?? 0
         if let measurement = Station.Measurement(piouPiouData: piouPiouData) {
             self.measurements = [measurement]
-        } else {
-            self.measurements = []
         }
     }
     
@@ -38,19 +41,21 @@ extension Station {
         self.name = aemetDatos.ubi
         self.latitude = aemetDatos.lat
         self.longitude = aemetDatos.lon
-        self.measurements = []
+        if let measurement = Station.Measurement(aemetData: aemetDatos) {
+            self.measurements = [measurement]
+        } 
     }
 }
 
 extension Station.Measurement {
-    init?(aemetData: AemetDatos) {
+    fileprivate init?(aemetData: AemetDatos) {
         guard let date = aemetData.fint else { return nil }
         self.date = date
         self.windSpeedMax = aemetData.vmax.map{$0*3.6}
         self.windSpeedAvg = aemetData.vv.map{$0*3.6}
         self.windHeading = aemetData.dv
     }
-    init?(piouPiouData: PiouPiouData) {
+    fileprivate init?(piouPiouData: PiouPiouData) {
         guard let date = piouPiouData.measurements.date else { return nil }
         self.date = date
         self.windHeading = piouPiouData.measurements.windHeading
@@ -62,11 +67,14 @@ extension Station.Measurement {
 extension Array where Element == Station {
     init(aemetDatas: [AemetDatos]) {
         let idemas: [String:Station] = aemetDatas.reduce(into: [:]) { idemas, aemetData in
-            var  station = idemas[aemetData.idema, default: Station(aemetDatos: aemetData)]
-            if let measurement = Station.Measurement(aemetData: aemetData) {
-                station.measurements.append(measurement)
+            if var station = idemas[aemetData.idema] {
+                if let measurement = Station.Measurement(aemetData: aemetData) {
+                    station.measurements.append(measurement)
+                    idemas[aemetData.idema] = station
+                }
+            } else {
+                idemas[aemetData.idema] = Station(aemetDatos: aemetData)
             }
-            idemas[aemetData.idema] = station
         }
         self = Array(idemas.values)
     }
@@ -77,33 +85,3 @@ extension Array where Element == Station {
 }
 
 
-import Foundation
-
-extension Station {
-    var title: String {
-        return "\(name) - \(id)"
-    }
-}
-
-
-extension Station.Measurement {
-    static var newFormatter: DateFormatter = {
-        let newFormatter = DateFormatter()
-        newFormatter.dateStyle = .medium
-        newFormatter.timeStyle = .medium
-        return newFormatter
-    }()
-    
-    var formattedDate: String {
-        return Station.Measurement.newFormatter.string(from: date)
-    }
-    
-    static func formattedSpeed(_ speed: Double)->String {
-        return "\(speed) km/h"
-    }
-    
-    static func formattedAngle(_ speed: Double)->String {
-        return "\(speed) º"
-    }
-
-}

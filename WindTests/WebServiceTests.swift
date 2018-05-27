@@ -14,22 +14,30 @@ class WebServiceTests: XCTestCase {
     private func resource(url:URL)->Resource<Data> {
         return Resource(url: url){$0}
     }
-//    func testLoadSuccess() {
-//        let url = URL(string:"http://api.pioupiou.fr/v1/live/19")!
-//        Webservice.load(resource(url: url)){ result in
-//            XCTAssertNotNil(result, "No data was downloaded.")
-//            print(String(data: result!, encoding: .utf8)!)
-//            self.expectation.fulfill()
-//        }
-//        wait(for: [expectation], timeout: 10.0)
-//    }
-//    
-//    func testLoadFailure() {
-//        let url = URL(string:"http://api.pioupiou.fr/v1/live/0")!
-//        Webservice.load(resource(url: url)){ result in
-//            XCTAssertNil(result, "Data was downloaded.")
-//            self.expectation.fulfill()
-//        }
-//        wait(for: [expectation], timeout: 10.0)
-//    }
-}
+    
+    func testPiouPiouFetchStationsSuccess() {
+        let resource = PiouPiouEndPoints.allStationsWithMeta() // not used
+        PiouPiou.mock.fetchStations(resource) {result in
+            guard case .success(let piouPiouStations) = result else { return }
+            XCTAssertEqual(piouPiouStations.doc, "http://developers.pioupiou.fr/api/live/")
+            XCTAssertEqual(piouPiouStations.license, "http://developers.pioupiou.fr/data-licensing")
+            XCTAssertEqual(piouPiouStations.attribution, "(c) contributors of the Pioupiou wind network <http://pioupiou.fr>")
+            XCTAssertEqual(piouPiouStations.data.count, 385)
+        }
+    }
+    
+    
+    func testPiouPiouFetchStationsFailure() {
+        let expectedError = NSError(domain: "Wind JSON Conversion", code: 1, userInfo: [NSLocalizedDescriptionKey: "Oops"])
+        let piouPiouFailure = PiouPiou(fetchStations: {_, callback in
+            callback(.failure(expectedError))
+        })
+    
+        let resource = PiouPiouEndPoints.allStationsWithMeta() // not used
+        piouPiouFailure.fetchStations(resource) {result in
+            guard case .failure(let error as NSError) = result else { return }
+            XCTAssertEqual(error, expectedError)
+        }
+    }
+
+ }

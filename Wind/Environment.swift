@@ -11,14 +11,14 @@ import Foundation
 struct Environment {
 //    var analytics = Analytics()
     var date: () -> Date = Date.init
-    var piouPiouWebService:PiouPiouWebService = PiouPiouWebService()
-    var aemetWebService:AEMETWebService = .mock //AEMETWebService()
+    var piouPiou = PiouPiou()
+    var aemet = AeMet.mock //AEMETWebService()
 }
 
 extension Environment {
     static let mock = Environment(
         date: { Date(timeIntervalSinceReferenceDate: 557152051) },
-        piouPiouWebService: .mock,
-        aemetWebService: .mock
+        piouPiou: .mock,
+        aemet: .mock
     )
 }

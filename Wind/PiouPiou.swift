@@ -9,46 +9,46 @@
 import Foundation
 
 struct PiouPiouData:Decodable, Equatable {
-    let id: Int
+    var id: Int
     struct Meta: Decodable, Equatable {
-        let name: String
-        let description: String?
-        let picture: String?
-        let date: Date?
+        var name: String
+        var description: String?
+        var picture: String?
+        var date: Date?
         struct Rating: Decodable, Equatable {
-            let upvotes: Int
-            let downvotes: Int
+            var upvotes: Int
+            var downvotes: Int
         }
-        let rating: Rating? 
+        var rating: Rating?
     }
-    let meta: Meta
+    var meta: Meta
     struct Location:Decodable, Equatable {
-        let latitude: Double?
-        let longitude: Double?
-        let date: Date?
-        let success: Bool
+        var latitude: Double?
+        var longitude: Double?
+        var date: Date?
+        var success: Bool
     }
-    let location: Location
+    var location: Location
     struct Measurements:Decodable, Equatable {
-        let date: Date?
-        let pressure: String? //nil
+        var date: Date?
+        var pressure: String? //nil
         /// degrees
-        let windHeading: Double?
+        var windHeading: Double?
         /// km/h
-        let windSpeedAvg: Double?
+        var windSpeedAvg: Double?
         /// km/h
-        let windSpeedMax: Double?
+        var windSpeedMax: Double?
         /// km/h
-        let windSpeedMin: Double?
+        var windSpeedMin: Double?
     }
-    let measurements: Measurements
+    var measurements: Measurements
     struct Status:Decodable, Equatable {
-        let date: Date?
+        var date: Date?
         /// dB
-        let snr: Double?
-        let state: String?
+        var snr: Double?
+        var state: String?
     }
-    let status: Status
+    var status: Status
     
 }
 
@@ -67,11 +67,11 @@ struct PiouPiouSingleStation:Decodable, Equatable {
 }
 
 struct PiouPiouEndPoints {
-    static var dateFormatter:DateFormatter {
+    static var dateFormatter: DateFormatter = {
         let piouPiouDateFormatter = DateFormatter()
         piouPiouDateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.zzzZ" // 2018-05-24T09:23:32.000Z
         return piouPiouDateFormatter
-    }
+    }()
     static func singleStation(stationID: Int)-> Resource<PiouPiouSingleStation>{
         return Resource(url: URL(string:"http://api.pioupiou.fr/v1/live/\(stationID)")!, PiouPiouSingleStation.self, dateFormatter:dateFormatter)
     }

@@ -9,14 +9,7 @@
 import UIKit
 
 var Current = Environment.mock
-//var Current = Environment()
-// TODO: tester erreurs
-/*
- Current.gitHub.fetchRepos = { callback in
- callback(.failure(NSError.init(domain: "co.pointfree", code: 1, userInfo: [NSLocalizedDescriptionKey: "Ooops!"])))
- }
-
- */
+//var Current = Environment() // Aemet reste mock en absence de certificat
 
 class StationsListViewController: UITableViewController {
     var stations: [Station] = [] {
@@ -33,7 +26,8 @@ class StationsListViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        Current.piouPiouWebService.fetchPiouPiou{ [weak self] result in
+
+        Current.piouPiou.fetchStations(PiouPiouEndPoints.allStationsWithMeta()) { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let piouPiouStations):
@@ -44,12 +38,12 @@ class StationsListViewController: UITableViewController {
             }
         }
  
-        Current.aemetWebService.fetchAemet{ [weak self] result in
+        Current.aemet.fetch(AEMETEndPoints.observacionConvencionalTodas()){ [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let responseSuccess):
                     let url = URL(string:responseSuccess.datos)!
-                    Current.aemetWebService.fetchAemetDatos(url) { [weak self] result in
+                    Current.aemet.fetchDatas(AEMETEndPoints.datos(url: url)) { [weak self] result in
                         DispatchQueue.main.async {
                             switch result {
                             case .success(let aemetDatas):

@@ -10,7 +10,7 @@ import Foundation
 
 extension Station {
     var title: String {
-        return "\(name) - \(id)"
+        return "\(name) - \(provider)"
     }
 }
 

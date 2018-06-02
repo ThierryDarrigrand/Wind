@@ -7,13 +7,24 @@
 //
 
 import Foundation
+enum Provider:Equatable {
+    case aemet(id: String)
+    case pioupiou(id:Int)
+}
 
-struct Station:Equatable, Comparable {
-    static func < (lhs: Station, rhs: Station) -> Bool {
-        return lhs.id < rhs.id
+extension Provider: CustomStringConvertible {
+    var description: String {
+        switch self {
+        case .aemet(let id):
+            return "AEMET.\(id)"
+        case .pioupiou(let id):
+            return "PiouPiou.\(id)"
+        }
     }
-    
-    var id: String
+
+}
+struct Station:Equatable {
+    var provider: Provider
     var name: String
     var latitude: Double
     var longitude: Double
@@ -27,7 +38,7 @@ struct Station:Equatable, Comparable {
 }
 extension Station {
     init(piouPiouData: PiouPiouData) {
-        self.id = "PiouPiou.\(piouPiouData.id)"
+        self.provider = .pioupiou(id: piouPiouData.id)
         self.name = piouPiouData.meta.name
         self.latitude = piouPiouData.location.latitude ?? 0
         self.longitude = piouPiouData.location.longitude ?? 0
@@ -38,7 +49,7 @@ extension Station {
     
     init?(piouPiouArchive: PiouPiouArchive) {
         guard piouPiouArchive.data.count > 0 else { return nil }
-        self.id = "PiouPiou.\(piouPiouArchive.data[0].id)"
+        self.provider = .pioupiou(id: piouPiouArchive.data[0].id)
         self.name = "N/A" // a completer par un appel anterieur a live
         self.latitude = piouPiouArchive.data[0].latitude ?? 0
         self.longitude = piouPiouArchive.data[0].longitude ?? 0
@@ -46,7 +57,7 @@ extension Station {
     }
     
     init(aemetDatos: AemetDatos) {
-        self.id = "Aemet.\(aemetDatos.idema)"
+        self.provider = .aemet(id: aemetDatos.idema)
         self.name = aemetDatos.ubi
         self.latitude = aemetDatos.lat
         self.longitude = aemetDatos.lon

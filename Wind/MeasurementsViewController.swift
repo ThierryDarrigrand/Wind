@@ -11,9 +11,10 @@ import UIKit
 class MeasurementsViewController: UITableViewController {
     var station: Station! {
         didSet {
-            station.measurements = station.measurements.sorted { (lhs, rhs) -> Bool in
+            station.measurements.sort{ lhs, rhs in
                 lhs.date > rhs.date
             }
+
             updateUI()
         }
     }
@@ -25,18 +26,15 @@ class MeasurementsViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let ids = station.id.split(separator:".")
-
-        if ids[0] == "PiouPiou" {
-            if station == nil { station = Station(id:"PiouPiou.0", name:"X", latitude: 0, longitude:0, measurements: [])}
-            Current.piouPiou.fetchArchive(PiouPiouEndPoints.archive(stationID: Int(ids[1])!, startDate: .lastDay, stopDate: .now)) { [weak self] result in
+        
+        if case .pioupiou(let id) = station.provider {
+            Current.piouPiou.fetchArchive(PiouPiouEndPoints.archive(stationID: id, startDate: .lastDay, stopDate: .now)) { [weak self] result in
                 DispatchQueue.main.async {
                     switch result {
                     case .success(let archive):
-                        if var stationFromArchive = Station(piouPiouArchive: archive) {
-                            stationFromArchive.name = (self?.station.name)!
-                            self?.station = stationFromArchive
-                            
+                        print(#function)
+                        if let stationFromArchive = Station(piouPiouArchive: archive) {
+                            self?.station.measurements = stationFromArchive.measurements
                         } else {
                             self?.station.measurements = []
                         }
@@ -45,9 +43,11 @@ class MeasurementsViewController: UITableViewController {
                     }
                 }
             }
-        }
-
+            
+        } 
+        
     }
+
 
 
     // MARK: - Table view data source

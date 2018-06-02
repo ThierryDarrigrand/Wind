@@ -28,7 +28,7 @@ private func fetchArchive(resource:Resource<PiouPiouArchive>, onComplete complet
 
 extension PiouPiou {
     static let mock = PiouPiou(fetchStations:{_, callback in
-        let fileURL = Bundle.main.url(forResource: "PiouPiouMeta", withExtension: "txt")
+        let fileURL = Bundle.main.url(forResource: "PiouPiouMeta", withExtension: "json")
         let data = try! Data(contentsOf: fileURL!)
         let resource = PiouPiouEndPoints.live(withMeta: true)
         let result = resource.parse(data)!
@@ -59,7 +59,7 @@ extension AeMet {
         let response = ResponseSuccess(descripcion:"Éxito", estado:200, datos: mockURL, metadatos:mockURL)
         callback(.success(response))
     }, fetchDatas: { _ , callback in
-        let fileURL = Bundle.main.url(forResource: "Aemet", withExtension: "txt")
+        let fileURL = Bundle.main.url(forResource: "Aemet", withExtension: "json")
         let data = try! Data(contentsOf: fileURL!)
         let result = AEMETEndPoints.datos(url: mockURL).parse(data)!
         callback(.success(result))

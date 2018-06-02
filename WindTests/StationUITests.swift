@@ -10,12 +10,16 @@ import XCTest
 @testable import Wind
 
 class StationUITests: XCTestCase {
-    let station = Station(id: "PiouPiou.19", name: "Porto Rico", latitude: 45, longitude: 20, measurements: [Station.Measurement(date: Date(timeIntervalSinceReferenceDate: 557152051), windHeading: 315, windSpeedAvg: 4.6, windSpeedMax: 5.5)])
+    var station = Station(provider: .pioupiou(id:19), name: "Porto Rico", latitude: 45, longitude: 20, measurements: [Station.Measurement(date: Date(timeIntervalSinceReferenceDate: 557152051), windHeading: 315, windSpeedAvg: 4.6, windSpeedMax: 5.5)])
     
     func testTitle() {
         XCTAssertEqual(station.title, "Porto Rico - PiouPiou.19")
     }
-    
+    func testTitleAemet() {
+        station.provider = .aemet(id: "SXRT3")
+        XCTAssertEqual(station.title, "Porto Rico - AEMET.SXRT3")
+    }
+
     func testFormattedAngle() {
         XCTAssertEqual(Station.Measurement.formattedAngle(316.5), "NW (316º)")
     }

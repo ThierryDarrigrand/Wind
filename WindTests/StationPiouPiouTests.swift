@@ -37,7 +37,7 @@ class StationPiouPiouTests: XCTestCase {
             state: "on")
     )
     func testConversionFromPiouPiou() {
-        let expectedStation = Station(id: "PiouPiou.19", name: "Porto Rico", latitude: 45, longitude: 20, measurements: [Station.Measurement(date: Date(timeIntervalSinceReferenceDate: 557152051), windHeading: 315, windSpeedAvg: 4.6, windSpeedMax: 5.5)])
+        let expectedStation = Station(provider: .pioupiou(id:19), name: "Porto Rico", latitude: 45, longitude: 20, measurements: [Station.Measurement(date: Date(timeIntervalSinceReferenceDate: 557152051), windHeading: 315, windSpeedAvg: 4.6, windSpeedMax: 5.5)])
         
         let station = Station(piouPiouData: piouPiouData)
         XCTAssertEqual(station, expectedStation)
@@ -82,7 +82,7 @@ class StationPiouPiouTests: XCTestCase {
                 windHeadings: [315.0, 315.0, 315.0, 315.0, 315.0, 315.0, 315.0, 315.0, 315.0, 315.0, 315.0, 315.0, 315.0, 315.0, 315.0],
                 pressures: [Double?](repeating: nil, count: 15)
         ) )
-        let expectedStation = Station(id: "PiouPiou.563", name: "N/A", latitude: 46.371751, longitude: 5.899987, measurements: archive.data.map{Station.Measurement(date: $0.date, windHeading: $0.windHeading, windSpeedAvg: $0.windSpeedAvg, windSpeedMax: $0.windSpeedMax) })
+        let expectedStation = Station(provider: .pioupiou(id:563), name: "N/A", latitude: 46.371751, longitude: 5.899987, measurements: archive.data.map{Station.Measurement(date: $0.date, windHeading: $0.windHeading, windSpeedAvg: $0.windSpeedAvg, windSpeedMax: $0.windSpeedMax) })
         let station = Station(piouPiouArchive: archive)
         XCTAssertEqual(station, expectedStation)
     }

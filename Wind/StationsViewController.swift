@@ -8,13 +8,13 @@
 
 import UIKit
 
-var Current = Environment.mock
-//var Current = Environment() // Aemet reste mock en absence de certificat
+//var Current = Environment.mock
+var Current = Environment() // Aemet reste mock en absence de certificat
 
 class StationsViewController: UITableViewController {
     var stations: [Station] = [] {
         didSet {
-            stations.sort { lhs, rhs in lhs.title < rhs.title }
+            stations.sort{ lhs, rhs in lhs.name < rhs.name }
             updateUI()
         }
     }
@@ -26,7 +26,7 @@ class StationsViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         Current.piouPiou.fetchStations(PiouPiouEndPoints.live(withMeta: true)) { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
@@ -37,7 +37,7 @@ class StationsViewController: UITableViewController {
                 }
             }
         }
- 
+        
         Current.aemet.fetch(AEMETEndPoints.observacionConvencionalTodas()){ [weak self] result in
             DispatchQueue.main.async {
                 switch result {
@@ -67,7 +67,7 @@ class StationsViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "StationCell", for: indexPath)
         let station = stations[indexPath.row]
         cell.textLabel?.text = station.name
-        cell.detailTextLabel?.text = station.id
+        cell.detailTextLabel?.text = "\(station.provider)"
         return cell
     }
     
@@ -75,6 +75,7 @@ class StationsViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let vc = segue.destination as? MeasurementsViewController,
             let indexPath = tableView.indexPathForSelectedRow {
+            print(#function)
             vc.station = stations[indexPath.row]
         }
     }

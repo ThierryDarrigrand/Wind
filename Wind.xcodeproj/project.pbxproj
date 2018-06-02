@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B71217C820A89D1A0071C506 /* Aemet.txt in Resources */ = {isa = PBXBuildFile; fileRef = B71217C720A89D1A0071C506 /* Aemet.txt */; };
-		B73002BB20B719BF0089EFEB /* PiouPiouMeta.txt in Resources */ = {isa = PBXBuildFile; fileRef = B73002B920B719BF0089EFEB /* PiouPiouMeta.txt */; };
+		B71217C820A89D1A0071C506 /* Aemet.json in Resources */ = {isa = PBXBuildFile; fileRef = B71217C720A89D1A0071C506 /* Aemet.json */; };
+		B73002BB20B719BF0089EFEB /* PiouPiouMeta.json in Resources */ = {isa = PBXBuildFile; fileRef = B73002B920B719BF0089EFEB /* PiouPiouMeta.json */; };
 		B73002BF20B72C010089EFEB /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = B73002BE20B72C010089EFEB /* Environment.swift */; };
 		B73002C120B7600F0089EFEB /* WebServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B73002C020B7600F0089EFEB /* WebServiceTests.swift */; };
 		B73002C320B76B8F0089EFEB /* ResourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B73002C220B76B8F0089EFEB /* ResourceTests.swift */; };
@@ -44,8 +44,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		B71217C720A89D1A0071C506 /* Aemet.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Aemet.txt; sourceTree = "<group>"; };
-		B73002B920B719BF0089EFEB /* PiouPiouMeta.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PiouPiouMeta.txt; sourceTree = "<group>"; };
+		B71217C720A89D1A0071C506 /* Aemet.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Aemet.json; sourceTree = "<group>"; };
+		B73002B920B719BF0089EFEB /* PiouPiouMeta.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = PiouPiouMeta.json; sourceTree = "<group>"; };
 		B73002BE20B72C010089EFEB /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		B73002C020B7600F0089EFEB /* WebServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebServiceTests.swift; sourceTree = "<group>"; };
 		B73002C220B76B8F0089EFEB /* ResourceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceTests.swift; sourceTree = "<group>"; };
@@ -95,9 +95,9 @@
 		B73002BD20B719D20089EFEB /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				B71217C720A89D1A0071C506 /* Aemet.txt */,
+				B71217C720A89D1A0071C506 /* Aemet.json */,
 				B7CE471620C2F46D0001926C /* PiouPiouArchive.csv */,
-				B73002B920B719BF0089EFEB /* PiouPiouMeta.txt */,
+				B73002B920B719BF0089EFEB /* PiouPiouMeta.json */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -239,12 +239,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B71217C820A89D1A0071C506 /* Aemet.txt in Resources */,
+				B71217C820A89D1A0071C506 /* Aemet.json in Resources */,
 				B7CE471720C2F46D0001926C /* PiouPiouArchive.csv in Resources */,
 				B780E86820A71D8F0012C42F /* LaunchScreen.storyboard in Resources */,
 				B780E86520A71D8F0012C42F /* Assets.xcassets in Resources */,
 				B780E86320A71D8E0012C42F /* Main.storyboard in Resources */,
-				B73002BB20B719BF0089EFEB /* PiouPiouMeta.txt in Resources */,
+				B73002BB20B719BF0089EFEB /* PiouPiouMeta.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

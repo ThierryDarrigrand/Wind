@@ -28,7 +28,7 @@ class StationAEMETTests: XCTestCase {
     
     func testConversionFromAemet() {
         let measurement = Station.Measurement(date: Date(timeIntervalSinceReferenceDate: 557152051), windHeading: 46.4, windSpeedAvg: 4.3*3.6, windSpeedMax: 3.2*3.6)
-        let expectedStation = Station(id: "Aemet.ST5XF", name: "Porto Rico", latitude: 45, longitude: 20, measurements: [measurement])
+        let expectedStation = Station(provider: .aemet(id:"ST5XF"), name: "Porto Rico", latitude: 45, longitude: 20, measurements: [measurement])
         let station = Station(aemetDatos: aemetData)
         XCTAssertEqual(station, expectedStation)
     }
@@ -67,4 +67,13 @@ class StationAEMETTests: XCTestCase {
         XCTAssertEqual(stations.sorted(by: <), [station2, station1].sorted(by: <))
     }
 
+}
+
+func < (lhs:Station, rhs:Station)->Bool {
+    switch (lhs.provider, rhs.provider){
+    case let (.pioupiou(id: idLhs), .pioupiou(id: idRhs)): return idLhs < idRhs
+    case let (.aemet(id: idLhs), .aemet(id: idRhs)): return idLhs < idRhs
+    case let (.pioupiou(id: idLhs), .aemet(id: idRhs)): return "\(idLhs)" < idRhs
+    case let (.aemet(id: idLhs), .pioupiou(id: idRhs)): return idLhs < "\(idRhs)"
+    }
 }

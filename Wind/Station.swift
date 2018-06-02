@@ -36,6 +36,15 @@ extension Station {
         }
     }
     
+    init?(piouPiouArchive: PiouPiouArchive) {
+        guard piouPiouArchive.data.count > 0 else { return nil }
+        self.id = "PiouPiou.\(piouPiouArchive.data[0].id)"
+        self.name = "N/A" // a completer par un appel anterieur a live
+        self.latitude = piouPiouArchive.data[0].latitude ?? 0
+        self.longitude = piouPiouArchive.data[0].longitude ?? 0
+        self.measurements = piouPiouArchive.data.map(Station.Measurement.init(measurement:))
+    }
+    
     init(aemetDatos: AemetDatos) {
         self.id = "Aemet.\(aemetDatos.idema)"
         self.name = aemetDatos.ubi
@@ -55,6 +64,14 @@ extension Station.Measurement {
         self.windSpeedAvg = aemetData.vv.map{$0*3.6}
         self.windHeading = aemetData.dv
     }
+    
+    fileprivate init(measurement: PiouPiouArchive.Measurement) {
+        self.date = measurement.date
+        self.windSpeedMax = measurement.windSpeedMax
+        self.windHeading = measurement.windHeading
+        self.windSpeedAvg = measurement.windSpeedAvg
+    }
+    
     fileprivate init?(piouPiouData: PiouPiouData) {
         guard let date = piouPiouData.measurements.date else { return nil }
         self.date = date

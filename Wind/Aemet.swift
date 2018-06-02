@@ -123,8 +123,8 @@ struct AEMEMetaDatos: Codable {
 struct ResponseSuccess: Decodable {
     let descripcion: String // "Éxito"
     let estado: Int // 200
-    let datos: String
-    let metadatos: String
+    let datos: URL
+    let metadatos: URL
 }
 
 struct AEMETEndPoints {
@@ -135,10 +135,10 @@ struct AEMETEndPoints {
     }
     
     static var dateFormatter: DateFormatter = {
-        let aemetDateFormatter = DateFormatter()
-        aemetDateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-        aemetDateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-        return aemetDateFormatter
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        dateFormatter.timeZone = TimeZone(identifier: "GMT")
+        return dateFormatter
     }()
     
     static func observacionConvencionalTodas()-> Resource<ResponseSuccess>{

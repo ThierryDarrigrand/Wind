@@ -15,9 +15,14 @@ enum Result<Value, Error> {
 
 struct PiouPiou {
     var fetchStations = fetchStations(resource:onComplete:)
+    var fetchArchive = fetchArchive(resource:onComplete:)
 }
 
 private func fetchStations(resource: Resource<PiouPiouStations>, onComplete completionHandler:(@escaping (Result<PiouPiouStations, Error>) -> Void)) {
+    load(resource, completion: completionHandler)
+}
+
+private func fetchArchive(resource:Resource<PiouPiouArchive>, onComplete completionHandler:(@escaping (Result<PiouPiouArchive, Error>) -> Void)) {
     load(resource, completion: completionHandler)
 }
 
@@ -25,7 +30,13 @@ extension PiouPiou {
     static let mock = PiouPiou(fetchStations:{_, callback in
         let fileURL = Bundle.main.url(forResource: "PiouPiouMeta", withExtension: "txt")
         let data = try! Data(contentsOf: fileURL!)
-        let resource = PiouPiouEndPoints.allStationsWithMeta()
+        let resource = PiouPiouEndPoints.live(withMeta: true)
+        let result = resource.parse(data)!
+        callback(.success(result))
+    }, fetchArchive: {_, callback in
+        let fileURL = Bundle.main.url(forResource: "PiouPiouArchive", withExtension: "csv")
+        let data = try! Data(contentsOf: fileURL!)
+        let resource = PiouPiouEndPoints.archive(stationID: 563, startDate: .lastHour, stopDate: .now)
         let result = resource.parse(data)!
         callback(.success(result))
     })
@@ -45,7 +56,7 @@ private func fetchDatas(resource:Resource<[AemetDatos]>, onComplete completionHa
 extension AeMet {
     static let mockURL = URL(string: "https://www.apple.com")!
     static let mock = AeMet(fetch: {_, callback in
-        let response = ResponseSuccess(descripcion:"Éxito", estado:200, datos: mockURL.absoluteString, metadatos:"")
+        let response = ResponseSuccess(descripcion:"Éxito", estado:200, datos: mockURL, metadatos:mockURL)
         callback(.success(response))
     }, fetchDatas: { _ , callback in
         let fileURL = Bundle.main.url(forResource: "Aemet", withExtension: "txt")
@@ -83,7 +94,7 @@ private func load<A>(_ resource: Resource<A>, completion: @escaping (Result<A, E
                 if let data = resource.parse(data) {
                     completion(.success(data))
                 } else {
-                    let error = NSError(domain: "Wind JSON Conversion", code: 1, userInfo: [NSLocalizedDescriptionKey: "Oops"])
+                    let error = NSError(domain: "Parse error", code: 1, userInfo: [NSLocalizedDescriptionKey: "Oops"])
                     completion(.failure(error))
                 }
             } else {

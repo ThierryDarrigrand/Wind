@@ -11,7 +11,7 @@ import UIKit
 var Current = Environment.mock
 //var Current = Environment() // Aemet reste mock en absence de certificat
 
-class StationsListViewController: UITableViewController {
+class StationsViewController: UITableViewController {
     var stations: [Station] = [] {
         didSet {
             stations.sort { lhs, rhs in lhs.title < rhs.title }
@@ -27,7 +27,7 @@ class StationsListViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        Current.piouPiou.fetchStations(PiouPiouEndPoints.allStationsWithMeta()) { [weak self] result in
+        Current.piouPiou.fetchStations(PiouPiouEndPoints.live(withMeta: true)) { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let piouPiouStations):
@@ -42,8 +42,7 @@ class StationsListViewController: UITableViewController {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let responseSuccess):
-                    let url = URL(string:responseSuccess.datos)!
-                    Current.aemet.fetchDatas(AEMETEndPoints.datos(url: url)) { [weak self] result in
+                    Current.aemet.fetchDatas(AEMETEndPoints.datos(url: responseSuccess.datos)) { [weak self] result in
                         DispatchQueue.main.async {
                             switch result {
                             case .success(let aemetDatas):
@@ -73,14 +72,13 @@ class StationsListViewController: UITableViewController {
     }
     
      // MARK: - Navigation     
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let vc = segue.destination as? StationDetailViewController,
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let vc = segue.destination as? MeasurementsViewController,
             let indexPath = tableView.indexPathForSelectedRow {
-            vc.measurements = stations[indexPath.row].measurements.last
-            vc.title = stations[indexPath.row].name
+            vc.station = stations[indexPath.row]
         }
-     }
-
-
+    }
+    
+    
 }
 

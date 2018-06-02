@@ -7,26 +7,32 @@
 //
 
 import Foundation
-struct Resource<A:Decodable> {
+
+struct Resource<A> {
     let url: URL
     let parse: (Data) -> A?
 }
 
-extension Resource {
+extension Resource where A:Decodable {
     init(url: URL, _ type: A.Type, dateFormatter: DateFormatter) {
         self.url = url
-        self.parse = { data in
-            do {
-                let decoder = JSONDecoder()
-                decoder.dateDecodingStrategy = .formatted(dateFormatter)
-                decoder.keyDecodingStrategy = .convertFromSnakeCase
-                return try decoder.decode(type, from: data)
-            }
-            catch {
-                // erreur de decodage du json
-                print(error)
-                return nil
-            }
+        self.parse = parseJSON(type, dateFormatter)
+    }
+}
+
+
+private func parseJSON<A:Decodable>(_ type: A.Type, _ dateFormatter: DateFormatter)-> (Data) -> A? {
+    return { data in
+        do {
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .formatted(dateFormatter)
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            return try decoder.decode(type, from: data)
+        }
+        catch {
+            // erreur de decodage du json
+            print(error)
+            return nil
         }
     }
 }

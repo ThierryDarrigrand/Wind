@@ -13,14 +13,16 @@ class DateFormatterTests: XCTestCase {
     
     func testPiouPiouDateFormatter() {
         let json = "2018-05-24T09:23:32.000Z"
-        let date = PiouPiouEndPoints.dateFormatter.date(from:json)
-        XCTAssertEqual(date,  Date(timeIntervalSinceReferenceDate: 548846612))
+        let date = Date(timeIntervalSinceReferenceDate: 548846612)
+        XCTAssertEqual(date,  PiouPiouEndPoints.dateFormatter.date(from:json))
+        XCTAssertEqual(json, PiouPiouEndPoints.dateFormatter.stringZ(from: date))
     }
     func testAemetDateFormatter() {
         let json = "2018-05-24T09:23:32"
-        let date = AEMETEndPoints.dateFormatter.date(from:json)
-        XCTAssertEqual(date,  Date(timeIntervalSinceReferenceDate: 548846612))
-    }
+        let date = Date(timeIntervalSinceReferenceDate: 548846612)
+        XCTAssertEqual(date,  AEMETEndPoints.dateFormatter.date(from:json))
+        XCTAssertEqual(json, AEMETEndPoints.dateFormatter.string(from: date))
 
-    
+    }
 }
+

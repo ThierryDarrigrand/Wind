@@ -45,7 +45,7 @@ enum WindDirection: Int, CustomStringConvertible {
 }
 
 extension Station.Measurement {
-    static var newFormatter: DateFormatter = {
+    static var UIFormatter: DateFormatter = {
         let newFormatter = DateFormatter()
         newFormatter.dateStyle = .medium
         newFormatter.timeStyle = .medium
@@ -53,7 +53,7 @@ extension Station.Measurement {
     }()
     
     var formattedDate: String {
-        return Station.Measurement.newFormatter.string(from: date)
+        return Station.Measurement.UIFormatter.string(from: date)
     }
     
     static func formattedSpeed(_ speed: Double)->String {

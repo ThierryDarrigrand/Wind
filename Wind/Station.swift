@@ -46,14 +46,8 @@ extension Station {
             self.measurements = [measurement]
         }
     }
-    
-    init?(piouPiouArchive: PiouPiouArchive) {
-        guard piouPiouArchive.data.count > 0 else { return nil }
-        self.provider = .pioupiou(id: piouPiouArchive.data[0].id)
-        self.name = "N/A" // a completer par un appel anterieur a live
-        self.latitude = piouPiouArchive.data[0].latitude ?? 0
-        self.longitude = piouPiouArchive.data[0].longitude ?? 0
-        self.measurements = piouPiouArchive.data.map(Station.Measurement.init(measurement:))
+    mutating func updateMeasurements(archive: PiouPiouArchive) {
+        measurements = archive.data.map(Station.Measurement.init(measurement:))
     }
     
     init(aemetDatos: AemetDatos) {

@@ -33,11 +33,7 @@ class MeasurementsViewController: UITableViewController {
                     switch result {
                     case .success(let archive):
                         print(#function)
-                        if let stationFromArchive = Station(piouPiouArchive: archive) {
-                            self?.station.measurements = stationFromArchive.measurements
-                        } else {
-                            self?.station.measurements = []
-                        }
+                        self?.station.updateMeasurements(archive: archive)
                     case .failure(let error):
                         print("\(error)")
                     }

@@ -82,20 +82,13 @@ class StationPiouPiouTests: XCTestCase {
                 windHeadings: [315.0, 315.0, 315.0, 315.0, 315.0, 315.0, 315.0, 315.0, 315.0, 315.0, 315.0, 315.0, 315.0, 315.0, 315.0],
                 pressures: [Double?](repeating: nil, count: 15)
         ) )
-        let expectedStation = Station(provider: .pioupiou(id:563), name: "N/A", latitude: 46.371751, longitude: 5.899987, measurements: archive.data.map{Station.Measurement(date: $0.date, windHeading: $0.windHeading, windSpeedAvg: $0.windSpeedAvg, windSpeedMax: $0.windSpeedMax) })
-        let station = Station(piouPiouArchive: archive)
+        
+        var station = Station(provider: .pioupiou(id:563), name: "Cabaliros", latitude: 46.371751, longitude: 5.899987, measurements: [])
+        var expectedStation = station
+        expectedStation.measurements = archive.data.map{Station.Measurement(date: $0.date, windHeading: $0.windHeading, windSpeedAvg: $0.windSpeedAvg, windSpeedMax: $0.windSpeedMax) }
+
+        station.updateMeasurements(archive: archive)
         XCTAssertEqual(station, expectedStation)
     }
     
-    func testConversionFromPiouPiouArchiveEmpty() {
-        let archive = PiouPiouArchive(
-            doc: nil,
-            license: "http://developers.pioupiou.fr/data-licensing",
-            attribution: "(c) contributors of the Pioupiou wind network <http://pioupiou.fr>",
-            legend: ["time", "latitude", "longitude", "wind_speed_min", "wind_speed_avg", "wind_speed_max", "wind_heading", "pressure"],
-            units: ["utc", "degrees", "degrees", "km/h", "km/h", "km/h", "degrees", "(deprecated)"],
-            data: [])
-        let station = Station(piouPiouArchive: archive)
-        XCTAssertNil(station)
-    }
 }

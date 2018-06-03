@@ -28,6 +28,7 @@
 		B780E88220A71FE00012C42F /* Aemet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B780E88120A71FE00012C42F /* Aemet.swift */; };
 		B780E88420A7201E0012C42F /* WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B780E88320A7201E0012C42F /* WebService.swift */; };
 		B780E88620A722520012C42F /* WindViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B780E88520A722520012C42F /* WindViewController.swift */; };
+		B7AF64AB20C48A700037B22F /* Support.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7AF64AA20C48A700037B22F /* Support.swift */; };
 		B7CE471520C2E7000001926C /* MeasurementsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7CE471420C2E7000001926C /* MeasurementsViewController.swift */; };
 		B7CE471720C2F46D0001926C /* PiouPiouArchive.csv in Resources */ = {isa = PBXBuildFile; fileRef = B7CE471620C2F46D0001926C /* PiouPiouArchive.csv */; };
 		B7D07FED20C0343400BF8192 /* PiouPiouEndPointsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7D07FEC20C0343400BF8192 /* PiouPiouEndPointsTests.swift */; };
@@ -69,6 +70,7 @@
 		B780E88120A71FE00012C42F /* Aemet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Aemet.swift; sourceTree = "<group>"; };
 		B780E88320A7201E0012C42F /* WebService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebService.swift; sourceTree = "<group>"; };
 		B780E88520A722520012C42F /* WindViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindViewController.swift; sourceTree = "<group>"; };
+		B7AF64AA20C48A700037B22F /* Support.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Support.swift; sourceTree = "<group>"; };
 		B7CE471420C2E7000001926C /* MeasurementsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasurementsViewController.swift; sourceTree = "<group>"; };
 		B7CE471620C2F46D0001926C /* PiouPiouArchive.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PiouPiouArchive.csv; sourceTree = "<group>"; };
 		B7D07FEC20C0343400BF8192 /* PiouPiouEndPointsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PiouPiouEndPointsTests.swift; sourceTree = "<group>"; };
@@ -147,6 +149,7 @@
 			isa = PBXGroup;
 			children = (
 				B780E87420A71D8F0012C42F /* Info.plist */,
+				B7AF64AA20C48A700037B22F /* Support.swift */,
 				B73002C020B7600F0089EFEB /* WebServiceTests.swift */,
 				B73002C220B76B8F0089EFEB /* ResourceTests.swift */,
 				B7D07FEC20C0343400BF8192 /* PiouPiouEndPointsTests.swift */,
@@ -285,6 +288,7 @@
 				B77582FA20BA934F00876167 /* StationPiouPiouTests.swift in Sources */,
 				B77582FE20BB694300876167 /* DateFormatterTests.swift in Sources */,
 				B73002C320B76B8F0089EFEB /* ResourceTests.swift in Sources */,
+				B7AF64AB20C48A700037B22F /* Support.swift in Sources */,
 				B7D07FED20C0343400BF8192 /* PiouPiouEndPointsTests.swift in Sources */,
 				B77582FC20BA9EB000876167 /* StationAEMETTests.swift in Sources */,
 			);

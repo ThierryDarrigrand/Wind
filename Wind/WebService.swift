@@ -14,55 +14,60 @@ enum Result<Value, Error> {
 }
 
 struct PiouPiou {
-    var fetchStations = fetchStations(resource:onComplete:)
-    var fetchArchive = fetchArchive(resource:onComplete:)
+    var fetchStations: (@escaping ((Result<PiouPiouStations, Error>) -> Void)) -> ()
+    var fetchArchive: (Int, @escaping ((Result<PiouPiouArchive, Error>) -> Void)) -> ()
+    
+    static let live = PiouPiou(
+        fetchStations: fetchStations(onComplete:),
+        fetchArchive: fetchArchive(stationID:onComplete:)
+    )
 }
 
-private func fetchStations(resource: Resource<PiouPiouStations>, onComplete completionHandler:(@escaping (Result<PiouPiouStations, Error>) -> Void)) {
+private func fetchStations(onComplete completionHandler:(@escaping (Result<PiouPiouStations, Error>) -> Void)) {
+    let resource = PiouPiouEndPoints.live()
     load(resource, completion: completionHandler)
 }
 
-private func fetchArchive(resource:Resource<PiouPiouArchive>, onComplete completionHandler:(@escaping (Result<PiouPiouArchive, Error>) -> Void)) {
+private func fetchArchive(stationID:Int, onComplete completionHandler:(@escaping (Result<PiouPiouArchive, Error>) -> Void)) {
+    let resource = PiouPiouEndPoints.archive(stationID: stationID)
     load(resource, completion: completionHandler)
 }
 
-extension PiouPiou {
-    static let mock = PiouPiou(fetchStations:{_, callback in
-        let fileURL = Bundle.main.url(forResource: "PiouPiouMeta", withExtension: "json")
-        let data = try! Data(contentsOf: fileURL!)
-        let resource = PiouPiouEndPoints.live(withMeta: true)
-        let result = resource.parse(data)!
-        callback(.success(result))
-    }, fetchArchive: {_, callback in
-        let fileURL = Bundle.main.url(forResource: "PiouPiouArchive", withExtension: "csv")
-        let data = try! Data(contentsOf: fileURL!)
-        let resource = PiouPiouEndPoints.archive(stationID: 563, startDate: .lastHour, stopDate: .now)
-        let result = resource.parse(data)!
-        callback(.success(result))
-    })
-}
 
 struct AeMet {
-    var fetch = fetch(resource:onComplete:)
-    var fetchDatas = fetchDatas(resource:onComplete:)
+    var fetch: (@escaping ((Result<ResponseSuccess, Error>) -> Void)) -> ()
+    var fetchDatas: (URL, @escaping ((Result<[AemetDatos], Error>) -> Void)) -> ()
+    
+    static let live = AeMet(
+        fetch: fetch(onComplete:),
+        fetchDatas: fetchDatas(url:onComplete:)
+    )
 }
-private func fetch(resource:Resource<ResponseSuccess>, onComplete completionHandler: (@escaping (Result<ResponseSuccess, Error>) -> Void)) {
+private func fetch(onComplete completionHandler: (@escaping (Result<ResponseSuccess, Error>) -> Void)) {
+    let resource = AEMETEndPoints.observacionConvencionalTodas()
     load(resource, completion: completionHandler)
 }
-private func fetchDatas(resource:Resource<[AemetDatos]>, onComplete completionHandler: (@escaping (Result<[AemetDatos], Error>) -> Void)) {
+private func fetchDatas(url:URL, onComplete completionHandler: (@escaping (Result<[AemetDatos], Error>) -> Void)) {
+    let resource = AEMETEndPoints.datos(url: url)
     load(resource, completion: completionHandler)
 }
 
 extension AeMet {
-    static let mockURL = URL(string: "https://www.apple.com")!
-    static let mock = AeMet(fetch: {_, callback in
-        let response = ResponseSuccess(descripcion:"Éxito", estado:200, datos: mockURL, metadatos:mockURL)
-        callback(.success(response))
-    }, fetchDatas: { _ , callback in
-        let fileURL = Bundle.main.url(forResource: "Aemet", withExtension: "json")
-        let data = try! Data(contentsOf: fileURL!)
-        let result = AEMETEndPoints.datos(url: mockURL).parse(data)!
-        callback(.success(result))
+    static let mock = AeMet(
+        fetch: {callback in
+            let response = ResponseSuccess(
+                descripcion:"Éxito",
+                estado:200,
+                datos: URL(string: "https://www.apple.com")!,
+                metadatos:URL(string: "https://www.apple.com")!
+            )
+            callback(.success(response))
+    },
+        fetchDatas: { url , callback in
+            let fileURL = Bundle.main.url(forResource: "Aemet", withExtension: "json")
+            let data = try! Data(contentsOf: fileURL!)
+            let result = AEMETEndPoints.datos(url: url).parse(data)!
+            callback(.success(result))
     })
 }
 

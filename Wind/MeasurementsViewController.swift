@@ -28,7 +28,7 @@ class MeasurementsViewController: UITableViewController {
         super.viewDidLoad()
         
         if case .pioupiou(let id) = station.provider {
-            Current.piouPiou.fetchArchive(PiouPiouEndPoints.archive(stationID: id, startDate: .lastDay, stopDate: .now)) { [weak self] result in
+            AppEnvironment.current.piouPiou.fetchArchive(id) { [weak self] result in
                 DispatchQueue.main.async {
                     switch result {
                     case .success(let archive):

@@ -99,15 +99,15 @@ struct PiouPiouEndPoints {
         return dateFormatter
     }()
     
-    static func live(withMeta: Bool, stationId: Int)-> Resource<PiouPiouSingleStation>{
+    static func live(withMeta: Bool = true, stationId: Int)-> Resource<PiouPiouSingleStation>{
         return Resource(url: URL(string:"http://api.pioupiou.fr/v1/\(withMeta ? "live-with-meta" : "live")/\(stationId)")!, PiouPiouSingleStation.self, dateFormatter:dateFormatter)
     }
     
-    static func live(withMeta: Bool)-> Resource<PiouPiouStations>{
+    static func live(withMeta: Bool = true)-> Resource<PiouPiouStations>{
         return Resource(url: URL(string:"http://api.pioupiou.fr/v1/\(withMeta ? "live-with-meta" : "live")/all")!, PiouPiouStations.self, dateFormatter:dateFormatter)
     }
 
-    static func archive(stationID: Int, startDate:StartDate, stopDate: StopDate)-> Resource<PiouPiouArchive> {
+    static func archive(stationID: Int, startDate:StartDate = .lastDay, stopDate: StopDate = .now)-> Resource<PiouPiouArchive> {
         return Resource(url: url(stationID, startDate, stopDate, dateFormatter), parse:parseCSV(stationID, dateFormatter))
     }
 }
@@ -194,3 +194,4 @@ extension StringProtocol {
         return self.dropFirst().dropLast()
     }
 }
+

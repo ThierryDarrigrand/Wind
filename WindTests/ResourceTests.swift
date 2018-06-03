@@ -8,7 +8,7 @@
 
 import XCTest
 @testable import Wind
-
+// TODO: a supprimer
 class ResourceTests: XCTestCase {
     let url = URL(string:"http://api.pioupiou.fr/v1/live/19")!
     let json =

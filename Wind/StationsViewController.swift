@@ -9,7 +9,7 @@
 import UIKit
 
 //var Current = Environment.mock
-var Current = Environment() // Aemet reste mock en absence de certificat
+//var Current = Environment() // Aemet reste mock en absence de certificat
 
 class StationsViewController: UITableViewController {
     var stations: [Station] = [] {
@@ -27,7 +27,7 @@ class StationsViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        Current.piouPiou.fetchStations(PiouPiouEndPoints.live(withMeta: true)) { [weak self] result in
+        AppEnvironment.current.piouPiou.fetchStations() { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let piouPiouStations):
@@ -38,11 +38,11 @@ class StationsViewController: UITableViewController {
             }
         }
         
-        Current.aemet.fetch(AEMETEndPoints.observacionConvencionalTodas()){ [weak self] result in
+        AppEnvironment.current.aemet.fetch(){ [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let responseSuccess):
-                    Current.aemet.fetchDatas(AEMETEndPoints.datos(url: responseSuccess.datos)) { [weak self] result in
+                    AppEnvironment.current.aemet.fetchDatas(responseSuccess.datos) { [weak self] result in
                         DispatchQueue.main.async {
                             switch result {
                             case .success(let aemetDatas):

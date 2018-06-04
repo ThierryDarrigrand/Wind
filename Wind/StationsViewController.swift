@@ -8,9 +8,6 @@
 
 import UIKit
 
-//var Current = Environment.mock
-//var Current = Environment() // Aemet reste mock en absence de certificat
-
 class StationsViewController: UITableViewController {
     var stations: [Station] = [] {
         didSet {
@@ -38,11 +35,12 @@ class StationsViewController: UITableViewController {
             }
         }
         
-        AppEnvironment.current.aemet.fetch(){ [weak self] result in
+        AppEnvironment.current.aemet.fetch() { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let responseSuccess):
-                    AppEnvironment.current.aemet.fetchDatas(responseSuccess.datos) { [weak self] result in
+                    let url = responseSuccess.datos
+                    AppEnvironment.current.aemet.fetchDatas(url) { [weak self] result in
                         DispatchQueue.main.async {
                             switch result {
                             case .success(let aemetDatas):

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-struct AemetDatos: Codable {
+struct AEMETDatos: Codable {
     /// Indicativo climatógico de la estación meteorológia automática
     var idema: String //"0002I",
     /// Longitud de la estación meteorológica (grados)
@@ -93,7 +93,7 @@ struct AemetDatos: Codable {
     
 }
 
-struct AEMEInventarioEstaciones: Codable {
+struct AEMETInventarioEstaciones: Codable {
     let latitud: String //"431825N",
     let provincia: String //"A CORUÑA",
     let altitud: String //"98",
@@ -104,7 +104,7 @@ struct AEMEInventarioEstaciones: Codable {
 }
 
 
-struct AEMEMetaDatos: Codable {
+struct AEMETMetaDatos: Codable {
     let unidadGeneradora: String //"Servicio de Observación",
     let periodicidad: String //"continuamente",
     let formato: String //"application/json",
@@ -120,7 +120,7 @@ struct AEMEMetaDatos: Codable {
     }
 }
 
-struct ResponseSuccess: Decodable {
+struct AEMETResponseSuccess: Decodable, Equatable {
     let descripcion: String // "Éxito"
     let estado: Int // 200
     let datos: URL
@@ -141,22 +141,22 @@ struct AEMETEndPoints {
         return dateFormatter
     }()
     
-    static func observacionConvencionalTodas()-> Resource<ResponseSuccess>{
+    static func observacionConvencionalTodas()-> Resource<AEMETResponseSuccess>{
         let url = urlApi("/api/observacion/convencional/todas")
-        return Resource(url: url, ResponseSuccess.self, dateFormatter: dateFormatter)
+        return Resource(url: url, AEMETResponseSuccess.self, dateFormatter: dateFormatter)
     }
-    static func observacionConvencionalDatosEstacion(idema: String)-> Resource<ResponseSuccess> {
+    static func observacionConvencionalDatosEstacion(idema: String)-> Resource<AEMETResponseSuccess> {
         let url = urlApi("/api/observacion/convencional/datos/estacion/\(idema)")
-        return Resource(url: url, ResponseSuccess.self, dateFormatter: dateFormatter)
+        return Resource(url: url, AEMETResponseSuccess.self, dateFormatter: dateFormatter)
     }
     
-    static func valoresClimatologicosInventarioEstacionesTodasEstaciones()-> Resource<ResponseSuccess>{
+    static func valoresClimatologicosInventarioEstacionesTodasEstaciones()-> Resource<AEMETResponseSuccess>{
         let url = urlApi("/api/valores/climatologicos/inventarioestaciones/todasestaciones")
-        return Resource(url: url, ResponseSuccess.self, dateFormatter: dateFormatter)
+        return Resource(url: url, AEMETResponseSuccess.self, dateFormatter: dateFormatter)
     }
     
-    static func datos(url:URL)->Resource<[AemetDatos]> {
-        return Resource(url: url, [AemetDatos].self, dateFormatter:dateFormatter)
+    static func datos(url:URL)->Resource<[AEMETDatos]> {
+        return Resource(url: url, [AEMETDatos].self, dateFormatter:dateFormatter)
     }
 }
 

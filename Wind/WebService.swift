@@ -35,19 +35,19 @@ private func fetchArchive(stationID:Int, onComplete completionHandler:(@escaping
 
 
 struct AeMet {
-    var fetch: (@escaping ((Result<ResponseSuccess, Error>) -> Void)) -> ()
-    var fetchDatas: (URL, @escaping ((Result<[AemetDatos], Error>) -> Void)) -> ()
+    var fetch: (@escaping ((Result<AEMETResponseSuccess, Error>) -> Void)) -> ()
+    var fetchDatas: (URL, @escaping ((Result<[AEMETDatos], Error>) -> Void)) -> ()
     
     static let live = AeMet(
         fetch: fetch(onComplete:),
         fetchDatas: fetchDatas(url:onComplete:)
     )
 }
-private func fetch(onComplete completionHandler: (@escaping (Result<ResponseSuccess, Error>) -> Void)) {
+private func fetch(onComplete completionHandler: (@escaping (Result<AEMETResponseSuccess, Error>) -> Void)) {
     let resource = AEMETEndPoints.observacionConvencionalTodas()
     load(resource, completion: completionHandler)
 }
-private func fetchDatas(url:URL, onComplete completionHandler: (@escaping (Result<[AemetDatos], Error>) -> Void)) {
+private func fetchDatas(url:URL, onComplete completionHandler: (@escaping (Result<[AEMETDatos], Error>) -> Void)) {
     let resource = AEMETEndPoints.datos(url: url)
     load(resource, completion: completionHandler)
 }
@@ -55,7 +55,7 @@ private func fetchDatas(url:URL, onComplete completionHandler: (@escaping (Resul
 extension AeMet {
     static let mock = AeMet(
         fetch: {callback in
-            let response = ResponseSuccess(
+            let response = AEMETResponseSuccess(
                 descripcion:"Éxito",
                 estado:200,
                 datos: URL(string: "https://www.apple.com")!,

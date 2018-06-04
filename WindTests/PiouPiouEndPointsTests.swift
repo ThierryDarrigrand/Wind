@@ -77,52 +77,7 @@ class PiouPiouEndPointsTests: XCTestCase {
         XCTAssertEqual(url, expectedURL)
     }
     
-    // TODO: a transfere dans WebServiceTests
-    func testArchiveParseFailure() {
-        let archive = PiouPiouEndPoints.archive(
-            stationID: id,
-            startDate:.date(startDate),
-            stopDate: .date(stopDate)
-        ).parse("abc".data(using: .utf8)!)
-        XCTAssertNil(archive)
-    }
-
-//    func testArchiveParseSuccess() {
-//        let data:Data = {
-//            let fileURL = Bundle.main.url(forResource: "PiouPiouArchive", withExtension: "csv")
-//            return  try! Data(contentsOf: fileURL!)
-//        }()
-//        let count = 15
-//
-//        let archive = PiouPiouEndPoints.archive(
-//            stationID: id,
-//            startDate:.date(startDate),
-//            stopDate: .date(stopDate)
-//            ).parse(data)
-//        
-//        let expectedArchive = PiouPiouArchive(
-//            doc: nil,
-//            license: "http://developers.pioupiou.fr/data-licensing",
-//            attribution: "(c) contributors of the Pioupiou wind network <http://pioupiou.fr>",
-//            legend: ["time", "latitude", "longitude", "wind_speed_min", "wind_speed_avg", "wind_speed_max", "wind_heading", "pressure"],
-//            units: ["utc", "degrees", "degrees", "km/h", "km/h", "km/h", "degrees", "(deprecated)"],
-//            data: [PiouPiouArchive.Measurement](
-//                ids:[Int](repeating:id, count: count),
-//                timeIntervals: [33, 277, 517, 757, 1000, 1240, 1480, 1724, 1964, 2204, 2449, 2689, 2929, 3173, 3413],
-//                since: startDate,
-//                latitudes:[Double](repeating: 46.371751, count: count),
-//                longitudes:[Double](repeating: 5.899987, count: count),
-//                windSpeedMins: [4.5, 5.0, 5.25, 4.5, 4.25, 4.25, 4.75, 4.5, 4.5, 3.25, 4.5, 5.5, 4.5, 5.5, 5.5],
-//                windSpeedAvgs: [6.25, 6.75, 7.0, 7.0, 6.5, 5.75, 6.5, 6.75, 6.75, 6.5, 6.75, 7.75, 7.5, 7.5, 7.75],
-//                windSpeedMaxs:[8.0, 8.25, 8.75, 8.75, 7.75, 7.0, 8.25, 8.0, 8.25, 8.75, 8.25, 9.75, 10.5, 9.5, 10.0],
-//                windHeadings: [315.0, 315.0, 315.0, 315.0, 315.0, 315.0, 315.0, 315.0, 315.0, 315.0, 315.0, 315.0, 315.0, 315.0, 315.0],
-//                pressures: [Double?](repeating: nil, count: count)
-//        ) )
-//        
-//        XCTAssertEqual(archive, expectedArchive)
-//        
-//    }
-    
+    // a transferer dans PiouPiouTests
     func testArchiveEmptyParseSuccess() {
         let data = """
 "License","http://developers.pioupiou.fr/data-licensing"

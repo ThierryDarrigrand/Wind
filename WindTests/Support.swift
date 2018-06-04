@@ -39,7 +39,7 @@ private func fetchStations(onComplete completionHandler:(@escaping (Result<PiouP
 private func fetchArchive(stationID:Int, onComplete completionHandler:(@escaping (Result<PiouPiouArchive, Error>) -> Void)) {
     let fileURL = Bundle.main.url(forResource: "PiouPiouArchive", withExtension: "csv")
     let data = try! Data(contentsOf: fileURL!)
-    let resource = PiouPiouEndPoints.archive(stationID: stationID)
+    let resource = PiouPiouEndPoints.archive(stationID: 563)
     let result = resource.parse(data)!
     completionHandler(.success(result))
 }
@@ -51,19 +51,25 @@ extension AeMet {
     )
 }
 
-private func fetch(onComplete completionHandler:@escaping ((Result<ResponseSuccess, Error>) -> Void)) {
-    let response = ResponseSuccess(
-        descripcion:"Éxito",
-        estado:200,
-        datos: URL(string: "https://www.apple.com")!,
-        metadatos:URL(string: "https://www.apple.com")!
-    )
-    completionHandler(.success(response))
-}
-
-private func fetchDatas(url:URL, onComplete completionHandler:  @escaping ((Result<[AemetDatos], Error>) -> Void)) {
-    let fileURL = Bundle.main.url(forResource: "Aemet", withExtension: "json")
-    let data = try! Data(contentsOf: fileURL!)
-    let result = AEMETEndPoints.datos(url: url).parse(data)!
+private func fetch(onComplete completionHandler:@escaping ((Result<AEMETResponseSuccess, Error>) -> Void)) {
+    let data = """
+    {
+    "descripcion": "Éxito",
+    "estado": 200,
+    "datos": "https://www.apple.com",
+    "metadatos": "https://www.apple.com"
+    }
+    """.data(using: .utf8)!
+    let resource = AEMETEndPoints.observacionConvencionalTodas()
+    let result = resource.parse(data)!
     completionHandler(.success(result))
 }
+
+private func fetchDatas(url:URL, onComplete completionHandler:  @escaping ((Result<[AEMETDatos], Error>) -> Void)) {
+    let fileURL = Bundle.main.url(forResource: "Aemet", withExtension: "json")
+    let data = try! Data(contentsOf: fileURL!)
+    let resource = AEMETEndPoints.datos(url: url)
+    let result = resource.parse(data)!
+    completionHandler(.success(result))
+}
+

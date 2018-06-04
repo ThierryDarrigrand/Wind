@@ -11,7 +11,7 @@ import XCTest
 
 class StationAEMETTests: XCTestCase {
     
-    var aemetData = AemetDatos(
+    var aemetData = AEMETDatos(
         idema: "ST5XF",
         lon: 20,
         lat: 45,

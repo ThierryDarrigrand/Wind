@@ -50,7 +50,7 @@ extension Station {
         measurements = archive.data.map(Station.Measurement.init(measurement:))
     }
     
-    init(aemetDatos: AemetDatos) {
+    init(aemetDatos: AEMETDatos) {
         self.provider = .aemet(id: aemetDatos.idema)
         self.name = aemetDatos.ubi
         self.latitude = aemetDatos.lat
@@ -62,7 +62,7 @@ extension Station {
 }
 
 extension Station.Measurement {
-    fileprivate init?(aemetData: AemetDatos) {
+    fileprivate init?(aemetData: AEMETDatos) {
         guard let date = aemetData.fint else { return nil }
         self.date = date
         self.windSpeedMax = aemetData.vmax.map{$0*3.6}
@@ -87,7 +87,7 @@ extension Station.Measurement {
 }
 
 extension Array where Element == Station {
-    init(aemetDatas: [AemetDatos]) {
+    init(aemetDatas: [AEMETDatos]) {
         let idemas: [String:Station] = aemetDatas.reduce(into: [:]) { idemas, aemetData in
             if var station = idemas[aemetData.idema] {
                 if let measurement = Station.Measurement(aemetData: aemetData) {

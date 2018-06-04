@@ -1,15 +1,16 @@
 //
-//  WebServiceTests.swift
+//  PiouPiouTests.swift
 //  WindTests
 //
-//  Created by Thierry Darrigrand on 24/05/2018.
+//  Created by Thierry Darrigrand on 04/06/2018.
 //  Copyright © 2018 Thierry Darrigrand. All rights reserved.
 //
 
 import XCTest
 @testable import Wind
 
-class WebServiceTests: XCTestCase {
+class PiouPiouTests: XCTestCase {
+    
     override func setUp() {
         super.setUp()
         AppEnvironment.push{ _ in Environment.mock }
@@ -19,7 +20,7 @@ class WebServiceTests: XCTestCase {
         super.tearDown()
         AppEnvironment.pop()
     }
-    
+
     let piouPiouLicense = "http://developers.pioupiou.fr/data-licensing"
     let piouPiouAttribution = "(c) contributors of the Pioupiou wind network <http://pioupiou.fr>"
     
@@ -52,37 +53,44 @@ class WebServiceTests: XCTestCase {
                 windHeadings: [315.0, 315.0, 315.0, 315.0, 315.0, 315.0, 315.0, 315.0, 315.0, 315.0, 315.0, 315.0, 315.0, 315.0, 315.0],
                 pressures: [Double?](repeating: nil, count: 15)
         ) )
-
+        
         AppEnvironment.current.piouPiou.fetchArchive(563) { result in
             guard case .success(let archive) = result else { XCTAssert(false) ; return }
             XCTAssertEqual(archive, expectedArchive)
         }
     }
     
-    // TODO: pioupiou failure
-//    func testPiouPiouFailure() {
-//        let expectedError = NSError(domain: "Parse Error", code: 1, userInfo: [NSLocalizedDescriptionKey: "Oops"])
-//        let piouPiouFetchStationsFailure: (@escaping ((Result<PiouPiouStations, Error>) -> Void)) -> () = {callback in
-//            callback(.failure(expectedError))
-//        }
-//        //AppEnvironment.current.piouPiou.fetchStations = piouPiouFetchStationsFailure
-////        AppEnvironment.current.piouPiou.fetchArchive = {_, callback in
-////            let fileURL = Bundle.main.url(forResource: "PiouPiouArchiveFailure", withExtension: "csv")
-////            let data = try! Data(contentsOf: fileURL!)
-////            let resource = PiouPiouEndPoints.archive(stationID: 563, startDate: .lastHour, stopDate: .now)
-////            if let result = resource.parse(data) {
-////                callback(.success(result))
-////            } else {
-////                callback(.failure(expectedError))
-////            }
-////        }
-//
-//        let resource = PiouPiouEndPoints.live() // not used
-//        piouPiouFetchStationsFailure() {result in
-//            guard case .failure(let error as NSError) = result else { return }
-//            XCTAssertEqual(error, expectedError)
-//        }
-//    }
-    // TODO: Aemet
-    
- }
+    let expectedError = NSError(domain: "Parse Error", code: 1, userInfo: [NSLocalizedDescriptionKey: "Oops"])
+
+    func testPiouPiouFetchFailure() {
+        func fetchStationsFailure(onComplete completionHandler:@escaping ((Result<PiouPiouStations, Error>) -> Void)) {
+            let data = "abc".data(using: .utf8)!
+            let resource = PiouPiouEndPoints.live()
+            XCTAssertNil(resource.parse(data))
+            completionHandler(.failure(expectedError))
+        }
+        
+        func fetchArchiveFailure(stationID:Int, onComplete completionHandler:  @escaping ((Result<PiouPiouArchive, Error>) -> Void)) {
+            let data = "abc".data(using: .utf8)!
+            let resource = PiouPiouEndPoints.archive(stationID: stationID)
+            XCTAssertNil(resource.parse(data))
+            completionHandler(.failure(expectedError))
+        }
+        let piouPiouFailure = PiouPiou(fetchStations: fetchStationsFailure(onComplete:), fetchArchive: fetchArchiveFailure(stationID:onComplete:))
+        
+        AppEnvironment.push { env in
+            Environment(date: env.date, piouPiou: piouPiouFailure, aemet: env.aemet)
+        }
+        AppEnvironment.current.piouPiou.fetchStations{ result in
+            guard case .failure(let error as NSError) = result else { XCTAssert(false) ; return }
+            XCTAssertEqual(error, self.expectedError)
+        }
+        AppEnvironment.current.piouPiou.fetchArchive(563){ result in
+            guard case .failure(let error as NSError) = result else { XCTAssert(false) ; return }
+            XCTAssertEqual(error, self.expectedError)
+        }
+        
+        AppEnvironment.pop()
+    }
+
+}

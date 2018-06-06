@@ -35,38 +35,37 @@ private func fetchArchive(stationID:Int, onComplete completionHandler:(@escaping
 
 
 struct AeMet {
-    var fetch: (@escaping ((Result<AEMETResponseSuccess, Error>) -> Void)) -> ()
-    var fetchDatas: (URL, @escaping ((Result<[AEMETDatos], Error>) -> Void)) -> ()
-    
+    var fetchDatas: (@escaping ((Result<[AEMETDatos], Error>) -> Void)) -> ()
+
     static let live = AeMet(
-        fetch: fetch(onComplete:),
-        fetchDatas: fetchDatas(url:onComplete:)
+        fetchDatas: fetchDatas(onComplete:)
     )
 }
-private func fetch(onComplete completionHandler: (@escaping (Result<AEMETResponseSuccess, Error>) -> Void)) {
+private func fetchDatas(onComplete completionHandler: (@escaping (Result<[AEMETDatos], Error>) -> Void)) {
     let resource = AEMETEndPoints.observacionConvencionalTodas()
-    load(resource, completion: completionHandler)
-}
-private func fetchDatas(url:URL, onComplete completionHandler: (@escaping (Result<[AEMETDatos], Error>) -> Void)) {
-    let resource = AEMETEndPoints.datos(url: url)
-    load(resource, completion: completionHandler)
+    load(resource){ result in
+        switch result {
+        case .success(let responseSuccess):
+            let url = responseSuccess.datos
+            let resource = Resource(url: url, [AEMETDatos].self, dateFormatter: AEMETEndPoints.dateFormatter)
+            load(resource, completion: completionHandler)
+            
+        case .failure(let error):
+            print(error)
+        }
+    }
 }
 
+extension URL {
+    static let mock = URL(string: "https://www.apple.com")!
+}
 extension AeMet {
     static let mock = AeMet(
-        fetch: {callback in
-            let response = AEMETResponseSuccess(
-                descripcion:"Éxito",
-                estado:200,
-                datos: URL(string: "https://www.apple.com")!,
-                metadatos:URL(string: "https://www.apple.com")!
-            )
-            callback(.success(response))
-    },
-        fetchDatas: { url , callback in
+        fetchDatas: { callback in
             let fileURL = Bundle.main.url(forResource: "Aemet", withExtension: "json")
             let data = try! Data(contentsOf: fileURL!)
-            let result = AEMETEndPoints.datos(url: url).parse(data)!
+            let resource = Resource(url: .mock, [AEMETDatos].self, dateFormatter: AEMETEndPoints.dateFormatter)
+            let result = resource.parse(data)!
             callback(.success(result))
     })
 }
@@ -117,4 +116,5 @@ private func load<A>(_ resource: Resource<A>, completion: @escaping (Result<A, E
         }
         }.resume()
 }
+
 

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-struct AEMETDatos: Codable {
+struct AEMETDatos: Codable, Equatable {
     /// Indicativo climatógico de la estación meteorológia automática
     var idema: String //"0002I",
     /// Longitud de la estación meteorológica (grados)
@@ -78,7 +78,7 @@ struct AEMETDatos: Codable {
     var vis: Double? //29.9,
     /// Altura del nivel de la superficie de referencia barométrica de 700 hPa calculado para las estaciones con altitud mayor de 2300 metros y correspondiente a la fecha indicada por 'fint' (m geopotenciales)
     var geo700: Double?
-    struct Geo850: Codable {
+    struct Geo850: Codable, Equatable {
         var value: Double
         var present: Bool
     }
@@ -153,11 +153,7 @@ struct AEMETEndPoints {
     static func valoresClimatologicosInventarioEstacionesTodasEstaciones()-> Resource<AEMETResponseSuccess>{
         let url = urlApi("/api/valores/climatologicos/inventarioestaciones/todasestaciones")
         return Resource(url: url, AEMETResponseSuccess.self, dateFormatter: dateFormatter)
-    }
-    
-    static func datos(url:URL)->Resource<[AEMETDatos]> {
-        return Resource(url: url, [AEMETDatos].self, dateFormatter:dateFormatter)
-    }
+    }    
 }
 
 

@@ -52,7 +52,7 @@ struct PiouPiouData:Decodable, Equatable {
     
 }
 
-struct PiouPiouStations:Decodable {
+struct PiouPiouStations:Decodable, Equatable {
     let doc: String
     let license: String
     let attribution: String

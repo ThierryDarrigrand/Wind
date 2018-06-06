@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import os
 
 struct Resource<A> {
     let url: URL
@@ -32,6 +33,7 @@ private func parseJSON<A:Decodable>(_ type: A.Type, _ dateFormatter: DateFormatt
         catch {
             // erreur de decodage du json
             print(error)
+//            os_log(error as! StaticString)
             return nil
         }
     }

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import os
 
 class MeasurementsViewController: UITableViewController {
     var station: Station! {
@@ -32,10 +33,10 @@ class MeasurementsViewController: UITableViewController {
                 DispatchQueue.main.async {
                     switch result {
                     case .success(let archive):
-                        print(#function)
+                        os_log(#function)
                         self?.station.updateMeasurements(archive: archive)
                     case .failure(let error):
-                        print("\(error)")
+                        os_log(error as! StaticString)
                     }
                 }
             }

@@ -21,11 +21,12 @@ class StationsViewController: UITableViewController {
         self.title = "Stations (\(stations.count))"
         tableView.reloadData()
     }
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        AppEnvironment.current.piouPiou.fetchStations() { [weak self] result in
+        Current.piouPiou.fetchStations() { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let piouPiouStations):
@@ -36,7 +37,7 @@ class StationsViewController: UITableViewController {
             }
         }
         
-        AppEnvironment.current.aemet.fetchDatas() { [weak self] result in
+        Current.aemet.fetchDatas() { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let aemetDatas):
@@ -49,28 +50,6 @@ class StationsViewController: UITableViewController {
     }
 
     
-//        AppEnvironment.current.aemet.fetch() { [weak self] result in
-//            DispatchQueue.main.async {
-//                switch result {
-//                case .success(let responseSuccess):
-//                    let url = responseSuccess.datos
-//                    AppEnvironment.current.aemet.fetchDatas(url) { [weak self] result in
-//                        DispatchQueue.main.async {
-//                            switch result {
-//                            case .success(let aemetDatas):
-//                                self?.stations += [Station](aemetDatas: aemetDatas)
-//                            case .failure(let error):
-//                                os_log(error as! StaticString)
-//                            }
-//                        }
-//                    }
-//                case .failure(let error):
-//                    os_log(error as! StaticString)
-//                }
-//            }
-//        }
-//    }
-
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return stations.count
     }

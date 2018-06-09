@@ -13,19 +13,18 @@ class PiouPiouTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
-        AppEnvironment.push{ _ in Environment.mock }
+        Current = .mock
     }
     
     override func tearDown() {
         super.tearDown()
-        AppEnvironment.pop()
     }
 
     let piouPiouLicense = "http://developers.pioupiou.fr/data-licensing"
     let piouPiouAttribution = "(c) contributors of the Pioupiou wind network <http://pioupiou.fr>"
     
     func testPiouPiouFetchStationsSuccess() {
-        AppEnvironment.current.piouPiou.fetchStations() {result in
+        Current.piouPiou.fetchStations() {result in
             guard case .success(let piouPiouStations) = result else { XCTAssert(false) ; return }
 //            XCTAssertEqual(piouPiouStations.doc, "http://developers.pioupiou.fr/api/live/")
 //            XCTAssertEqual(piouPiouStations.license, self.piouPiouLicense)
@@ -55,7 +54,7 @@ class PiouPiouTests: XCTestCase {
 //                pressures: [Double?](repeating: nil, count: 15)
 //        ) )
         
-        AppEnvironment.current.piouPiou.fetchArchive(563) { result in
+        Current.piouPiou.fetchArchive(563) { result in
             guard case .success(let archive) = result else { XCTAssert(false) ; return }
             XCTAssertEqual(archive, .mock)
         }
@@ -79,19 +78,16 @@ class PiouPiouTests: XCTestCase {
         }
         let piouPiouFailure = PiouPiou(fetchStations: fetchStationsFailure(onComplete:), fetchArchive: fetchArchiveFailure(stationID:onComplete:))
         
-        AppEnvironment.push { env in
-            Environment(date: env.date, piouPiou: piouPiouFailure, aemet: env.aemet)
-        }
-        AppEnvironment.current.piouPiou.fetchStations{ result in
+        Current = Environment(date: Current.date, piouPiou: piouPiouFailure, aemet: Current.aemet)
+        Current.piouPiou.fetchStations{ result in
             guard case .failure(let error as NSError) = result else { XCTAssert(false) ; return }
             XCTAssertEqual(error, self.expectedError)
         }
-        AppEnvironment.current.piouPiou.fetchArchive(563){ result in
+        Current.piouPiou.fetchArchive(563){ result in
             guard case .failure(let error as NSError) = result else { XCTAssert(false) ; return }
             XCTAssertEqual(error, self.expectedError)
         }
         
-        AppEnvironment.pop()
     }
 
 }

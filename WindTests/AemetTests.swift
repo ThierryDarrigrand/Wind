@@ -13,16 +13,15 @@ import XCTest
 class AeMetTests: XCTestCase {
     override func setUp() {
         super.setUp()
-        AppEnvironment.push{ _ in .mock }
+        Current = .mock
     }
     
     override func tearDown() {
         super.tearDown()
-        AppEnvironment.pop()
     }
         
     func testAemetFetchDatas() {
-        AppEnvironment.current.aemet.fetchDatas(){ result in
+        Current.aemet.fetchDatas(){ result in
             guard case .success(let aemetDatas) = result else { XCTAssert(false) ; return }
             XCTAssertEqual(aemetDatas, .mock)
         }
@@ -36,14 +35,11 @@ class AeMetTests: XCTestCase {
             completionHandler(.failure(NSError.mock))
         }
         let aemetFailure = AeMet(fetchDatas: fetchDatasFailure(onComplete:))
-        AppEnvironment.push { env in
-            Environment(date: env.date, piouPiou: env.piouPiou, aemet: aemetFailure)
-        }
-        AppEnvironment.current.aemet.fetchDatas(){ result in
+        Current = Environment(date: Current.date, piouPiou: Current.piouPiou, aemet: aemetFailure)
+        Current.aemet.fetchDatas(){ result in
             guard case .failure(let error as NSError) = result else { XCTAssert(false) ; return }
             XCTAssertEqual(error, NSError.mock)
         }
-        AppEnvironment.pop()
     }
     
  }

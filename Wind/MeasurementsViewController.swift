@@ -29,7 +29,7 @@ class MeasurementsViewController: UITableViewController {
         super.viewDidLoad()
         
         if case .pioupiou(let id) = station.provider {
-            AppEnvironment.current.piouPiou.fetchArchive(id) { [weak self] result in
+            Current.piouPiou.fetchArchive(id) { [weak self] result in
                 DispatchQueue.main.async {
                     switch result {
                     case .success(let archive):
